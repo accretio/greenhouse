@@ -22,17 +22,32 @@ module base_beam() {
 }
 
 
+
+module beam6() {
+     difference() {
+          rotate([180, 0, 0]) {
+               difference() {
+                    base_beam();
+                    translate([-BeamDepth/8, 0, 0]) {
+                         cube([BeamDepth/4, BeamLip, BeamWidth], center=true);
+                    }
+               }
+          }
+       
+     }
+}
+
 module beam3() {
      difference() {
           rotate([0, 180, 0]) {
                difference() {
                     base_beam();
-                    translate([0, 0, -BeamWidth/4]) {
+                  /*  translate([0, 0, -BeamWidth/4]) {
                          cube([BeamDepth, BeamLip, BeamWidth/2], center=true);
                     } 
                     translate([-BeamDepth/8, 0, 0]) {
                          cube([BeamDepth/4, BeamLip, BeamWidth], center=true);
-                    } 
+                    } */ 
                  /*   cube([BeamDepth, BeamLip, BeamWidth], center=true);
                  */
 /*   translate([0, 0, -BeamWidth/2]) {
@@ -54,28 +69,7 @@ module beam3() {
 
 
 
-module beam6() {
-     difference() {
-          rotate([180, 0, 0]) {
-               difference() {
-                    base_beam();
-                  
-               }
-          }
-        //  beam5();
 
-          /*
-
-           
-            beam1(); */
-
-          // this is the shape of beam1
-          beam1_mask();
-          beam4();
-          beam5();
-          beam3();
-     }
-}
 
 module beam1_mask() {
      rotate([135, 0, 0]) {
@@ -107,8 +101,8 @@ module beam4() {
           translate([- BeamWidth/2, -BeamWidth , - BeamLip/2]) {
                cube([BeamDepth/2, BeamWidth*4, BeamWidth*2]);
           }
-          beam2();
-          beam1();
+        /*  beam2();
+          beam1(); */
      }
 } 
 
@@ -124,8 +118,8 @@ module beam5() {
           translate([- BeamWidth/2, -2*BeamWidth , - BeamLip/2]) {
                cube([BeamDepth/4, BeamWidth*4, BeamWidth*2]);
           }
-          beam2();
-          beam1();
+        /*  beam2();
+          beam1(); */
      }
   
      
@@ -173,15 +167,15 @@ module beam1() {
 }
 
 
-translate([0, 0, 20]) {
+translate([0, -20, 20]) {
      beam1();
 }
 
-translate([0, 0, 20]) {
+translate([0, 20, 20]) {
      beam2();
 }
 
-translate([0, 0, 0]) {
+translate([0, 20, 0]) {
      beam3();     
 }
 
@@ -196,6 +190,6 @@ translate([0, 0, 0]) {
      beam5();
 } 
 
-translate([0, 0, 10]) {
+translate([0, 0, 0]) {
      beam6();
 }
