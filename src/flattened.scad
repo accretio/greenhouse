@@ -54,7 +54,7 @@ module beam1() {
           translate([0, 0, -BeamWidth/2]) {
                cube([2*BeamWidth, 2*BeamWidth, BeamWidth], center=true);
           }
-           
+          beam2_lip();
      }
 
      beam1_lip();
