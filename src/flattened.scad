@@ -23,116 +23,32 @@ module base_beam() {
 
 
 
-module beam6() {
+module beam1() {
      difference() {
-          rotate([180, 0, 0]) {
+          rotate([120, 0, 0]) {
+        
                difference() {
                     base_beam();
-                    translate([-BeamDepth/8, 0, 0]) {
-                         cube([BeamDepth/4, BeamLip, BeamWidth], center=true);
-                    }
+                  
                }
           }
        
      }
-}
-
-module beam3() {
-     difference() {
-          rotate([0, 180, 0]) {
-               difference() {
-                    base_beam();
-                  /*  translate([0, 0, -BeamWidth/4]) {
-                         cube([BeamDepth, BeamLip, BeamWidth/2], center=true);
-                    } 
-                    translate([-BeamDepth/8, 0, 0]) {
-                         cube([BeamDepth/4, BeamLip, BeamWidth], center=true);
-                    } */ 
-                 /*   cube([BeamDepth, BeamLip, BeamWidth], center=true);
-                 */
-/*   translate([0, 0, -BeamWidth/2]) {
-                         cube([BeamDepth, BeamLip, BeamWidth/2], center=true);
-                    } 
-                    translate([0, 0, BeamWidth/2]) {
-                         cube([BeamDepth, BeamLip, BeamWidth/2], center=true);
-                    } */
-              
-               }
-          
-               //   beam4();
-               // beam2();
-               // beam1();
-          }
-         //  beam2();
-     }
-}
-
-
-
-
-
-module beam1_mask() {
-     rotate([135, 0, 0]) {
-          translate([0, -BeamLip/2, -BeamWidth/2]) {
-               cube([BeamWidth/2, BeamLip*2, 2* BeamWidth], center=true);
-          }
-          translate([0, 0, -BeamWidth]) {
-               cube([BeamWidth, BeamLip, BeamWidth], center=true);
-          } 
-          difference() {
-               base_beam();
-               translate([0, 0, BeamWidth/8]) {
-                    cube([BeamDepth, BeamLip, 3*BeamWidth/4], center=true);
-               }
-          }
-    
-}
-}
-
-
-module beam4() {
-     difference() {
-          rotate([-45, 0, 0]) {
-               base_beam(); 
-          }
-          translate([BeamWidth/2 - BeamDepth/4, -BeamWidth, - BeamLip/2]) {
-               cube([BeamDepth/4, BeamWidth*4, BeamWidth*2]);
-          }
-          translate([- BeamWidth/2, -BeamWidth , - BeamLip/2]) {
-               cube([BeamDepth/2, BeamWidth*4, BeamWidth*2]);
-          }
-        /*  beam2();
-          beam1(); */
-     }
-} 
-
-
-module beam5() {
-     difference() {
-          rotate([-135, 0, 0]) {
-               base_beam();
-          }
-          translate([BeamWidth/2 - BeamDepth/2, -2*BeamWidth , - BeamLip/2]) {
-               cube([BeamDepth/2, BeamWidth*4, BeamWidth*2]);
-          }
-          translate([- BeamWidth/2, -2*BeamWidth , - BeamLip/2]) {
-               cube([BeamDepth/4, BeamWidth*4, BeamWidth*2]);
-          }
-        /*  beam2();
-          beam1(); */
-     }
-  
+     
      
 }
 
 
 module beam2() {
      difference() {
-          rotate([45, 0, 0]) {
-               cube([BeamDepth/4, BeamLip, BeamWidth/3], center=true);
+          rotate([60, 0, 0]) {
+               
                difference() {
                     base_beam();
-                    cube([BeamDepth, BeamLip, BeamWidth], center=true); 
+                    cube([BeamWidth, BeamWidth, BeamWidth], center=true);
+               }
+               translate([-BeamWidth/8, 0, -BeamWidth/2 + BeamWidth/8]) {
+                    cube([BeamWidth/4, BeamWidth, BeamWidth/4], center=true);
                }
           };
          
@@ -140,47 +56,158 @@ module beam2() {
      
 }
 
-
-module beam1() {
+module beam6() {
      difference() {
-          rotate([135, 0, 0]) {
-        
+        rotate([180, 0, 0]) {
                difference() {
                     base_beam();
-                    //   cube([BeamDepth, BeamLip, BeamWidth/2], center=true);
-                    /* translate([0, 0, 2 * BeamWidth/6]) {
-                       cube([BeamDepth, BeamLip, BeamWidth/3], center=true);
-                       }
-                       translate([0, 0, -2 * BeamWidth/6]) {
-                       cube([BeamDepth, BeamLip, BeamWidth/3], center=true);
-                       } */
-                    translate([0, 0, BeamWidth/4]) {
-                         cube([BeamDepth, BeamLip, BeamWidth/2], center=true);
+                    translate([0, -BeamWidth/2, 0]) {
+                         cube([BeamWidth/2, BeamWidth, BeamWidth], center=true);
+                    }
+                     translate([-BeamWidth/2, 0, 0]) {
+                         cube([BeamWidth/2, BeamWidth, BeamWidth/3], center=true);
+                    }
+                    translate([BeamWidth/2, 0,  BeamWidth/3]) {
+                         cube([BeamWidth/2, BeamWidth, BeamWidth/3], center=true);
+                    }
+                     translate([BeamWidth/2, 0,  -BeamWidth/3]) {
+                         cube([BeamWidth/2, BeamWidth, BeamWidth/3], center=true);
+                    }
+                   
+               }
+          } 
+          holder_mask();
+     }
+}
+
+module beam3() {
+     difference() {
+          rotate([0, 0, 0]) {
+               difference() {
+                    base_beam();
+                    translate([0, -BeamWidth/2, 0]) {
+                         cube([BeamWidth/2, BeamWidth, BeamWidth], center=true);
+                    }
+                    // the teeth
+                    translate([BeamWidth/2, 0, 0]) {
+                         cube([BeamWidth/2, BeamWidth, BeamWidth/3], center=true);
+                    }
+                    translate([-BeamWidth/2, 0,  BeamWidth/3]) {
+                         cube([BeamWidth/2, BeamWidth, BeamWidth/3], center=true);
+                    }
+                     translate([-BeamWidth/2, 0,  -BeamWidth/3]) {
+                         cube([BeamWidth/2, BeamWidth, BeamWidth/3], center=true);
                     }
                }
           }
-          beam2();
-        //  beam3();
+          holder_mask();
+         
      }
-     
+}
+
+
+
+
+module beam4() {
+    difference() {
+          rotate([-60, 0, 0]) {
+               difference() {
+                    base_beam();
+                  
+               }
+          }
+          rotate([-120, 0, 0]) {
+               translate([BeamWidth/2, BeamWidth, -1.5*BeamWidth]) {
+                    cube([BeamWidth, 4*BeamWidth, 4*BeamWidth], center=true);
+               }
+          }
+          holder();
+    
+     }
+    
+} 
+
+
+module beam5() {
+   
+     difference() {
+          rotate([-120, 0, 0]) {
+               difference() {
+                    base_beam();
+                    
+               }
+          }
+          rotate([-60, 0, 0]) {
+               translate([-BeamWidth/2, BeamWidth, 1.5*BeamWidth]) {
+                    cube([BeamWidth, 4*BeamWidth, 4*BeamWidth], center=true);
+               }
+          } 
+           holder();
+       
+          //  beam1(); */
+     }
+    
+}
+
+
+module holder_mask() {
+    
+     difference() {
+          
+          cube([2*BeamWidth, 2*BeamWidth, 2*BeamWidth], center=true);
+          holder();
+          rotate([120, 0, 0]) {
+               translate([0, -BeamWidth/2,-BeamWidth]) {
+                    cube([BeamWidth/2, 1.5*BeamWidth, BeamWidth], center=true);
+               }
+          }
+          
+          rotate([60, 0, 0]) {
+               translate([0, -BeamWidth/2, BeamWidth]) {
+                    cube([BeamWidth/2, 1.5* BeamWidth, BeamWidth], center=true);
+               }
+          }    
+     }
      
 }
 
 
-translate([0, -20, 20]) {
+
+module holder() {
+     translate([0, 0, BeamWidth/1]) {
+          difference() {
+               cube([BeamWidth*2, BeamWidth*2, 2*BeamWidth], center=true);
+               cube([BeamWidth/2, BeamWidth/2, 2*BeamWidth], center=true);
+          }
+     }
+      translate([0, 0, BeamWidth/2]) {
+          difference() {
+               cube([BeamWidth*2, BeamWidth*2, 2*BeamWidth], center=true);
+               cube([BeamWidth/2, 2*BeamWidth, 2*BeamWidth], center=true);
+          }
+     }
+}
+ 
+translate([0, -20, 40]) {
      beam1();
 }
 
-translate([0, 20, 20]) {
+translate([0, 0, 4]) {
      beam2();
 }
 
+
+
+translate([0, 0, 0]) {
+     beam6();
+}
 translate([0, 20, 0]) {
      beam3();     
 }
 
 
 // these two would be pretty solid.
+
 
 translate([0, 0, 0]) {
      beam4();
@@ -190,6 +217,3 @@ translate([0, 0, 0]) {
      beam5();
 } 
 
-translate([0, 0, 0]) {
-     beam6();
-}
