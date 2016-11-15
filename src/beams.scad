@@ -62,7 +62,7 @@ function distance (p1, p2) =
 
 
 BeamWidth= 100; 
-ScaleFactor=(Radius + BrickDepth /2) / 100 ;
+ScaleFactor=10;
 
 module element(length) {
     translate([0, 0, length/2]) {
@@ -105,7 +105,7 @@ module create_beams(points, triangles) {
         // p1 -- p2
         beam(p1, p2);
         beam(p2, p3);
-        
+        beam(p1, p3);
         // il y a un peu de géometrie à faire .. 
         
         
