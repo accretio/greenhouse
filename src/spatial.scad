@@ -50,18 +50,27 @@ module beam(p1, p2, p3, color, showAxes) {
           show_cs(ref_38_31);
      in_cs(ref_38_31) {
           color(color) {
-               difference() {
+               intersection() {
+                    union() {
+                         difference() {
+                              translate([-BeamLip, 0, 0]) {
+                                   rotate([0, 90, 0]){
+                                        cylinder(ScaleFactor * norm((p2-p1)) + BeamLip, BeamDiameter/2, BeamDiameter/2);
+                                   }
+                              }
+                              children(0);
+                         };
+                         children(1) ;
+                    }
                     translate([-BeamLip, 0, 0]) {
                          rotate([0, 90, 0]){
                               cylinder(ScaleFactor * norm((p2-p1)) + BeamLip, BeamDiameter/2, BeamDiameter/2);
                          }
-                    }
-                    children(0);
-               };
-               children(1) ;
-          }
+                    } ;
+               }
      }
 }
+     }
 
 // helpers to change coordinate systems
 
@@ -115,14 +124,14 @@ p7 = points2[36];
 
 // let's print the joint beams
 module red_mortaise() {
-     translate([BeamDiameter/4 + BeamDiameter/4, BeamDiameter/8,- BeamDiameter/2]) {
+     translate([BeamDiameter/4 + BeamDiameter/4, BeamDiameter/8, 0]) {
           cube([BeamDiameter, BeamDiameter/4, BeamDiameter], center=true);
      };
 }
 
 module green_mortaise() {
-     translate([BeamDiameter/2,  - BeamDiameter/8, -BeamDiameter/12]) {
-          cube([BeamDiameter, BeamDiameter/4, BeamDiameter/2], center=true);
+     translate([BeamDiameter/4,  - BeamDiameter/4, 0]) { 
+          cube([BeamDiameter/2, BeamDiameter/4, BeamDiameter], center=true);
      }
 }
 
@@ -193,16 +202,18 @@ module red_beam() {
                translate([-BeamDiameter/2, 0, 0]) {
                     cube([2*BeamDiameter, BeamDiameter, BeamDiameter], center=true);
                };
+                red_mortaise();
           }; 
          
        
-          head_in_beam_referential(p1, p7, p5);
+         //* head_in_beam_referential(p1, p7, p5);
           // head_in_beam_referential(p1, p5, p6);
-          in_beam_referential(p1, p7, p5) {
+         /* in_beam_referential(p1, p7, p5) {
                blue_mortaise();
-          }
+          } */
      }
-     difference() {
+
+     /* difference() {
           intersection() {
                in_beam_referential(p1, p3, p7) {
                
@@ -220,7 +231,7 @@ module red_beam() {
           in_beam_referential(p1, p7, p5) {
                blue_mortaise();
           }
-     }
+     } */
      
 }
 
@@ -263,24 +274,22 @@ module black_beam() {
           
           head_in_beam_referential(p1, p4, p2);
           in_beam_referential(p1, p4, p2) {
-               translate([BeamDiameter/2 + BeamDiameter/4, -BeamDiameter/8, BeamDiameter/6]) {
-                    cube([BeamDiameter, BeamDiameter/4, BeamDiameter], center=true);
-               }
+               green_mortaise();
           }
-
           head_in_beam_referential(p1, p3, p7);
 
           in_beam_referential(p1, p3, p7) {
-               translate([BeamDiameter/2, BeamDiameter/8, -BeamDiameter/4]) {
-                    cube([BeamDiameter, BeamDiameter/4, BeamDiameter], center=true);
-               };
+             red_mortaise();
           };
 
-
+/*
           in_beam_referential(p1, p7, p5) {
                blue_mortaise();
-          }
+          } */
 
+  
+     
+        //  black_lip_splitter();
         
           //   red_beam();
        
@@ -393,34 +402,14 @@ module pink_beam() {
 
 
 module orange_beam() {
-     difference() {
-          beam(p1, p5, p6, "orange") {
-               translate([-BeamDiameter/2, 0, 0]) {
-                    cube([BeamDiameter, BeamDiameter, BeamDiameter], center=true);
-               };
-              
+     beam(p1, p5, p6, "orange") {
+          translate([-BeamDiameter/2, 0, 0]) {
+               cube([BeamDiameter, BeamDiameter, BeamDiameter], center=true);
           };
-          
-          // these are the mortaises from the two lower
-          // side beams. 
-          in_beam_referential(p1, p3, p7) {
-               red_mortaise();
-          };
-          black_lip_mask();
-          in_beam_referential(p1, p7, p5) {
-               blue_mortaise();
-          }
-
-          in_beam_referential(p1, p6, p4) {
-               pink_mortaise();
-          }
-         
-          
-     }
-     
-     in_beam_referential(p1, p5, p6) {
           orange_mortaise();
-     }
+          
+     };
+       
      
 }
 
@@ -446,17 +435,17 @@ prepare_for_stl(p1, p4, p2) {
 
 translate([0, 0, 0]){
      prepare_for_stl(p1, p3, p7) {
-          red_beam();
+         red_beam();
      }
 }
 
 prepare_for_stl(p1, p3, p7) {
-     blue_beam();
+   //  blue_beam();
 }
 
 
 prepare_for_stl(p1, p2, p3) {
-     black_beam();
+   black_beam();
     
 }
 
@@ -464,8 +453,9 @@ prepare_for_stl(p1, p6, p4) {
      //  pink_beam();
 } 
 
-
+translate([0, 0, 0]) {
 prepare_for_stl(p1, p5, p6) {
-     //  orange_beam();
+    //  orange_beam();
 }
 
+}
