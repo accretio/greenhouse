@@ -6,7 +6,7 @@ BeamDiameter=20;
 BeamLip=10;
 
 
-PrepareForSTL=true;
+PrepareForSTL=false;
 // old beam stuff, needed for the wireframe
 
 module element(length, diameter, c) {
@@ -23,7 +23,7 @@ module wire(p1, p2, diameter, color) {
        
      b = acos(axle[2]/length); // inclination angle
      c = atan2(axle[1], axle[0]);     // azimuthal angle
-
+ 
      translate(p1) {
           rotate([0, b, c]) {
                element(length, diameter, color);
@@ -76,9 +76,11 @@ module beam(p1, p2, p3, color) {
 
 module prepare_for_stl(p1, p2, p3) {
      if (PrepareForSTL) {
-          ref_38_31 = new_cs(origin=p1,axes=[(p2-p1), cross((p2-p1), (p3-p1))]);
-          back_to_absolute(ref_38_31) {
-               children(); 
+          rotate([0, 90, 0]) {
+               ref_38_31 = new_cs(origin=p1,axes=[(p2-p1), cross((p2-p1), (p3-p1))]);
+               back_to_absolute(ref_38_31) {
+                    children(); 
+               }
           }
      } else {
           children();
@@ -124,14 +126,30 @@ p7 = points2[36];
 
 // let's print the joint beams
 module red_mortaise() {
-     translate([BeamDiameter/2, BeamDiameter/8, 0]) {
-          cube([BeamDiameter/2, BeamDiameter/4, 4* BeamDiameter/8], center=true);
+     translate([BeamDiameter/4, BeamDiameter/8, 0]) {
+          cube([BeamDiameter/2, BeamDiameter/6, 6* BeamDiameter/8], center=true);
      };
 }
 
 module green_mortaise() {
-     translate([BeamDiameter/4,  - BeamDiameter/4, 0]) { 
-          cube([BeamDiameter/2, BeamDiameter/4, BeamDiameter/8 * 6], center=true);
+     translate([BeamDiameter/4,  - BeamDiameter/8, 0]) { 
+          cube([BeamDiameter/2, BeamDiameter/6, BeamDiameter/8 * 6], center=true);
+     }
+}
+
+module green_mortaise_mask() {
+  in_beam_referential(p1, p4, p2) {
+      translate([BeamDiameter/4,  - BeamDiameter/8, BeamDiameter/8]) { 
+          cube([BeamDiameter/2, BeamDiameter/6, BeamDiameter], center=true);
+     }     
+  }
+}
+
+module red_mortaise_mask() {
+     in_beam_referential(p1, p3, p7) {
+          translate([BeamDiameter/4, BeamDiameter/8, -BeamDiameter/8]) {
+               cube([BeamDiameter/2, BeamDiameter/6, BeamDiameter], center=true);
+          };
      }
 }
 
@@ -150,22 +168,45 @@ module pink_mortaise() {
 
 
 module orange_mortaise() {
-     translate([BeamDiameter/4,  BeamDiameter/4, 0]) {
-         cube([BeamDiameter/2, BeamDiameter/3, BeamDiameter/4], center=true);
+     translate([BeamDiameter/4, BeamDiameter/4, -BeamDiameter/8]) {
+         cube([BeamDiameter/2, BeamDiameter/3, BeamDiameter/8], center=true);
+     }
+       translate([BeamDiameter/4,  0, BeamDiameter/3]) {
+         cube([BeamDiameter/2, BeamDiameter/3, BeamDiameter/8], center=true);
+     }
+       translate([BeamDiameter/4,  0, -BeamDiameter/3]) {
+         cube([BeamDiameter/2, BeamDiameter/3, BeamDiameter/8], center=true);
      }
 }
+
+
 
 
 
 module green_beam() {
      //  green_mask();
      difference() {
-          beam(p1, p4, p2, "green", showAxes=false) {
-               translate([-BeamDiameter/2, 0, 0]) {
-                    cube([2*BeamDiameter, BeamDiameter, BeamDiameter], center=true);
+          union() {
+               beam(p1, p4, p2, "green", showAxes=false) {
+                    translate([-BeamDiameter/2, 0, 0]) {
+                         cube([2*BeamDiameter, BeamDiameter, BeamDiameter], center=true);
                };
-               green_mortaise();
-          };
+                    // green_mortaise();
+               };
+               
+               difference() {
+                    in_beam_referential(p1, p4, p2) {
+                         green_mortaise();
+                    }
+                    orange_split_plane(); 
+               }
+          }
+          in_beam_referential(p1, p5, p6) {
+               
+          orange_mortaise();
+          }
+          }
+     
           
 
           /*  difference() {
@@ -191,18 +232,19 @@ module green_beam() {
 
             head_in_beam_referential(p1, p6, p4);
             head_in_beam_referential(p1, p5, p6); */
-     } 
+      
 }
 
 
 
 module red_beam() {
-     difference() {
-          beam(p1, p3, p7, "red") {
+    difference() {
+         union() {
+              beam(p1, p3, p7, "red") {
                translate([-BeamDiameter/2, 0, 0]) {
                     cube([2*BeamDiameter, BeamDiameter, BeamDiameter], center=true);
                };
-                red_mortaise();
+               // red_mortaise();
           }; 
          
        
@@ -211,7 +253,18 @@ module red_beam() {
          /* in_beam_referential(p1, p7, p5) {
                blue_mortaise();
           } */
-     }
+        difference() {
+                in_beam_referential(p1, p3, p7) {
+                     red_mortaise();
+                }
+               orange_split_plane(); 
+          }
+        }
+           in_beam_referential(p1, p5, p6) {
+               
+          orange_mortaise();
+          }
+           }
 
      /* difference() {
           intersection() {
@@ -273,15 +326,14 @@ module black_beam() {
 
           
           head_in_beam_referential(p1, p4, p2);
-          in_beam_referential(p1, p4, p2) {
-             green_mortaise();
-          }
+        
           head_in_beam_referential(p1, p3, p7);
-
-          in_beam_referential(p1, p3, p7) {
-             red_mortaise();
-          };
-
+       head_in_beam_referential(p1, p7, p5) ;
+          head_in_beam_referential(p1, p6, p4) ;
+   
+         red_mortaise_mask();
+         green_mortaise_mask();
+         
           orange_split_plane();
 
          in_beam_referential(p1, p5, p6) {
@@ -321,9 +373,8 @@ module black_beam() {
                red_mortaise();
                }
 
-               in_beam_referential(p1, p6, p4) {
-               //  pink_mortaise();
-               }
+               
+            
                // this is the splitter
                black_lip_splitter();
           */
@@ -363,15 +414,15 @@ module blue_beam() {
                translate([-BeamDiameter/2, 0, 0]) {
                     cube([2*BeamDiameter, BeamDiameter, BeamDiameter], center=true);
                };
-               blue_mortaise();
+              // blue_mortaise();
           };
 
-          intersection() {
+       /*   intersection() {
                in_beam_referential(p1, p3, p7) {
                     red_mortaise();
                }
                head_in_beam_referential(p1, p3, p7);
-          }
+          } */
           // black_lip_splitter();
 
           //  head_in_beam_referential(p1, p5, p6);
@@ -392,33 +443,27 @@ module pink_beam() {
                };
       
           };
-          head_in_beam_referential(p1, p5, p6);
+         // head_in_beam_referential(p1, p5, p6);
      }
 
-     difference() {
-          in_beam_referential(p1, p6, p4) {
-               pink_mortaise();
-          }
-          in_beam_referential(p1, p5, p6) {
-               orange_mortaise();
-          }
-          
-     }
+    
 }
+
+SplitPlaneAngle=-15;
 
 module orange_split_plane() {
      in_beam_referential(p1, p5, p6, "red") {
-          rotate([0, 0, -15]) {
+          rotate([0, 0, SplitPlaneAngle]) {
           translate([-BeamDiameter/3 + BeamDiameter, 0, 0]) {
                cube([BeamDiameter, 2*BeamDiameter, 2*BeamDiameter], center=true);
           };
           }
-          }
+     }
 }
 
 module orange_splitter() {
      in_beam_referential(p1, p5, p6, "red") {
-          rotate([0, 0, -15]) {
+          rotate([0, 0, SplitPlaneAngle]) {
           translate([-BeamDiameter/3, 0, 0]) {
                cube([BeamDiameter, 2*BeamDiameter, 2*BeamDiameter], center=true);
           };
@@ -432,31 +477,27 @@ module orange_beam() {
                translate([-BeamDiameter/3, 0, 0]) {
                 //    cube([BeamDiameter, BeamDiameter, BeamDiameter], center=true);
                };
-              orange_mortaise();
+         //     orange_mortaise();
                
           };
           
 
-          head_in_beam_referential(p1, p4, p2);
-          in_beam_referential(p1, p4, p2) {
-               green_mortaise();
-          }
-          head_in_beam_referential(p1, p3, p7);
-          
-          in_beam_referential(p1, p3, p7) {
-               red_mortaise();
-          };
 
           orange_splitter();
-
-        //  black_beam();
           
-       
+          head_in_beam_referential(p1, p7, p5) ;
+          head_in_beam_referential(p1, p6, p4) ;
+             
      }
 
-     in_beam_referential(p1, p5, p6) {
-          orange_mortaise();
+     // this is a bit dirty. we may want to rewrite all this if rendering gets too slow.
+     difference() {
+          in_beam_referential(p1, p5, p6) {
+               orange_mortaise();
+          }
+          orange_split_plane();
      }
+     
 }
 
 
@@ -476,22 +517,22 @@ module orange_beam() {
 
 
 prepare_for_stl(p1, p4, p2) {
-   green_beam();
+ green_beam();
 }
 
 translate([0, 0, 0]){
      prepare_for_stl(p1, p3, p7) {
- //      red_beam();
+      red_beam();
      }
 }
 
 prepare_for_stl(p1, p3, p7) {
-   //  blue_beam();
+   // blue_beam();
 }
 
 
 prepare_for_stl(p1, p2, p3) {
-// black_beam();
+//black_beam();
     
 }
 
@@ -501,7 +542,7 @@ prepare_for_stl(p1, p6, p4) {
 
 translate([0, 0, 0]) {
 prepare_for_stl(p1, p5, p6) {
-   //  orange_beam();
+     orange_beam();
 }
 
 }
