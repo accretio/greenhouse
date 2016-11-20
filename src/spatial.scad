@@ -1,12 +1,12 @@
 include <data.scad>
 include <local.scad>
 
-ScaleFactor=1;
+ScaleFactor=0.5;
 BeamDiameter=20;
-BeamLip=5;
+BeamLip=10;
 
 
-PrepareForSTL=false;
+PrepareForSTL=true;
 // old beam stuff, needed for the wireframe
 
 module element(length, diameter, c) {
@@ -44,7 +44,7 @@ module create_wire(points, triangles) {
 
 
 
-module beam(p1, p2, p3, color, showAxes) {
+module beam(p1, p2, p3, color) {
      ref_38_31 = new_cs(origin=p1,axes=[(p2-p1), cross((p2-p1), (p3-p1))]);
      if (showAxes)
           show_cs(ref_38_31);
@@ -124,14 +124,14 @@ p7 = points2[36];
 
 // let's print the joint beams
 module red_mortaise() {
-     translate([BeamDiameter/4 + BeamDiameter/4, BeamDiameter/8, 0]) {
-          cube([BeamDiameter, BeamDiameter/4, BeamDiameter], center=true);
+     translate([BeamDiameter/2, BeamDiameter/8, 0]) {
+          cube([BeamDiameter/2, BeamDiameter/4, 4* BeamDiameter/8], center=true);
      };
 }
 
 module green_mortaise() {
      translate([BeamDiameter/4,  - BeamDiameter/4, 0]) { 
-          cube([BeamDiameter/2, BeamDiameter/4, BeamDiameter], center=true);
+          cube([BeamDiameter/2, BeamDiameter/4, BeamDiameter/8 * 6], center=true);
      }
 }
 
@@ -150,8 +150,8 @@ module pink_mortaise() {
 
 
 module orange_mortaise() {
-     translate([BeamDiameter/2, -BeamDiameter/4, 0]) {
-          cube([BeamDiameter, BeamDiameter/6, BeamDiameter/2], center=true);
+     translate([BeamDiameter/4,  BeamDiameter/4, 0]) {
+         cube([BeamDiameter/2, BeamDiameter/3, BeamDiameter/4], center=true);
      }
 }
 
@@ -264,7 +264,7 @@ module black_lip_splitter() {
 module black_beam() {
      
      difference() {
-          beam(p1, p2, p3, "black") {
+          beam(p1, p2, p3, "black", lip=BeamDiameter) {
                /*   translate([-BeamDiameter/1, 0, 0]) {
                     cube([BeamDiameter, BeamDiameter, BeamDiameter], center=true);
                     }; */
@@ -274,7 +274,7 @@ module black_beam() {
           
           head_in_beam_referential(p1, p4, p2);
           in_beam_referential(p1, p4, p2) {
-               green_mortaise();
+             green_mortaise();
           }
           head_in_beam_referential(p1, p3, p7);
 
@@ -282,6 +282,12 @@ module black_beam() {
              red_mortaise();
           };
 
+          orange_split_plane();
+
+         in_beam_referential(p1, p5, p6) {
+               orange_mortaise();
+          } 
+           //    orange_beam();
 /*
           in_beam_referential(p1, p7, p5) {
                blue_mortaise();
@@ -400,17 +406,57 @@ module pink_beam() {
      }
 }
 
+module orange_split_plane() {
+     in_beam_referential(p1, p5, p6, "red") {
+          rotate([0, 0, -15]) {
+          translate([-BeamDiameter/3 + BeamDiameter, 0, 0]) {
+               cube([BeamDiameter, 2*BeamDiameter, 2*BeamDiameter], center=true);
+          };
+          }
+          }
+}
+
+module orange_splitter() {
+     in_beam_referential(p1, p5, p6, "red") {
+          rotate([0, 0, -15]) {
+          translate([-BeamDiameter/3, 0, 0]) {
+               cube([BeamDiameter, 2*BeamDiameter, 2*BeamDiameter], center=true);
+          };
+          }
+          }
+}
 
 module orange_beam() {
-     beam(p1, p5, p6, "orange") {
-          translate([-BeamDiameter/2, 0, 0]) {
-               cube([BeamDiameter, BeamDiameter, BeamDiameter], center=true);
+     difference() {
+          beam(p1, p5, p6, "orange") {
+               translate([-BeamDiameter/3, 0, 0]) {
+                //    cube([BeamDiameter, BeamDiameter, BeamDiameter], center=true);
+               };
+              orange_mortaise();
+               
           };
-          orange_mortaise();
           
-     };
+
+          head_in_beam_referential(p1, p4, p2);
+          in_beam_referential(p1, p4, p2) {
+               green_mortaise();
+          }
+          head_in_beam_referential(p1, p3, p7);
+          
+          in_beam_referential(p1, p3, p7) {
+               red_mortaise();
+          };
+
+          orange_splitter();
+
+        //  black_beam();
+          
        
-     
+     }
+
+     in_beam_referential(p1, p5, p6) {
+          orange_mortaise();
+     }
 }
 
 
@@ -430,12 +476,12 @@ module orange_beam() {
 
 
 prepare_for_stl(p1, p4, p2) {
-     green_beam();
+   green_beam();
 }
 
 translate([0, 0, 0]){
      prepare_for_stl(p1, p3, p7) {
-         red_beam();
+ //      red_beam();
      }
 }
 
@@ -445,7 +491,7 @@ prepare_for_stl(p1, p3, p7) {
 
 
 prepare_for_stl(p1, p2, p3) {
-   black_beam();
+// black_beam();
     
 }
 
@@ -455,7 +501,7 @@ prepare_for_stl(p1, p6, p4) {
 
 translate([0, 0, 0]) {
 prepare_for_stl(p1, p5, p6) {
-    //  orange_beam();
+   //  orange_beam();
 }
 
 }
