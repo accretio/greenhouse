@@ -154,22 +154,42 @@ module red_mortaise_mask() {
 }
 
 module blue_mortaise() {
-     translate([BeamDiameter/2, -BeamDiameter/6, BeamDiameter/6]) {
-          cube([BeamDiameter, BeamDiameter/3, BeamDiameter/3], center=true);
+     translate([BeamDiameter/4, BeamDiameter/6, 0]) {
+     //    cube([BeamDiameter/2, BeamDiameter/6, BeamDiameter/3], center=true);
      }
 }
 
 module pink_mortaise() {
-     translate([BeamDiameter/2, 0, 0]) {
-          cube([BeamDiameter, BeamDiameter/3, BeamDiameter/3], center=true);
+     translate([BeamDiameter/4, BeamDiameter/3, 0]) {
+       //   cube([BeamDiameter/2, BeamDiameter/6, BeamDiameter/2], center=true);
+     }
+   /*     translate([BeamDiameter/4,- BeamDiameter/3, 0]) {
+          cube([BeamDiameter/2, BeamDiameter/6, BeamDiameter/3], center=true);
+     } */
+}
+
+//pink_mask();
+module pink_mask() {
+     in_beam_referential(p1, p4, p2) {
+          translate([BeamDiameter/4 + BeamDiameter/3, - BeamDiameter/8  - BeamDiameter/2 - BeamDiameter/6, BeamDiameter/2]) {
+             //  cube([BeamDiameter/2, BeamDiameter/6 + BeamDiameter, BeamDiameter], center=true);
+          }
      }
 }
 
 
 
+module blue_mask() {
+     in_beam_referential(p1, p7, p5) {
+          translate([BeamDiameter/4 + BeamDiameter/2, -BeamDiameter/2, 0]) {
+               cube([BeamDiameter/2, BeamDiameter, BeamDiameter], center=true);
+          }
+     }
+}
+
 module orange_mortaise() {
-     translate([BeamDiameter/4, BeamDiameter/4, -BeamDiameter/8]) {
-         cube([BeamDiameter/2, BeamDiameter/3, BeamDiameter/8], center=true);
+     translate([BeamDiameter/3, BeamDiameter/4, -BeamDiameter/8]) {
+         cube([BeamDiameter, BeamDiameter/3, BeamDiameter/8], center=true);
      }
        translate([BeamDiameter/4,  0, BeamDiameter/3]) {
          cube([BeamDiameter/2, BeamDiameter/3, BeamDiameter/8], center=true);
@@ -178,9 +198,6 @@ module orange_mortaise() {
          cube([BeamDiameter/2, BeamDiameter/3, BeamDiameter/8], center=true);
      }
 }
-
-
-
 
 
 module green_beam() {
@@ -203,88 +220,52 @@ module green_beam() {
           }
           in_beam_referential(p1, p5, p6) {
                
-          orange_mortaise();
+               orange_mortaise();
           }
+         /* intersection() {
+               pink_mask();
+               head_in_beam_referential(p1, p6, p4);
+          } */
+          in_beam_referential(p1, p3, p7) {
+               blue_mortaise();
           }
+          
+     }
      
           
 
-          /*  difference() {
-              head_in_beam_referential(p1,p2,p3);
-              green_mortaise();
-              }*/
-          
-          // head_in_beam_referential(p1, p3, p7) ;
-       
-          // the red pins
-
-
-          /*in_beam_referential(p1, p3, p7) {
-            red_mortaise();
-              
-            }
-
-            in_beam_referential(p1, p5, p6) {
-            orange_mortaise();
-            }
-
-          
-
-            head_in_beam_referential(p1, p6, p4);
-            head_in_beam_referential(p1, p5, p6); */
       
 }
 
 
 
 module red_beam() {
-    difference() {
-         union() {
-              beam(p1, p3, p7, "red") {
-               translate([-BeamDiameter/2, 0, 0]) {
+     difference() {
+          union() {
+               beam(p1, p3, p7, "red") {
+                    translate([-BeamDiameter/2, 0, 0]) {
                     cube([2*BeamDiameter, BeamDiameter, BeamDiameter], center=true);
-               };
+                    };
                // red_mortaise();
-          }; 
-         
-       
-         //* head_in_beam_referential(p1, p7, p5);
-          // head_in_beam_referential(p1, p5, p6);
-         /* in_beam_referential(p1, p7, p5) {
-               blue_mortaise();
-          } */
-        difference() {
-                in_beam_referential(p1, p3, p7) {
-                     red_mortaise();
-                }
-               orange_split_plane(); 
-          }
-        }
-           in_beam_referential(p1, p5, p6) {
+               }; 
                
-          orange_mortaise();
-          }
-           }
-
-     /* difference() {
-          intersection() {
-               in_beam_referential(p1, p3, p7) {
-               
-                    intersection() {
-                    
-                         rotate([0, 90, 0]) {
-                              translate([0, 0, BeamDiameter/2]) {
-                                   cylinder(2*BeamDiameter, BeamDiameter/2, BeamDiameter/2, center=true);
-                              }
-                         }
+               difference() {
+                    in_beam_referential(p1, p3, p7) {
                          red_mortaise();
                     }
-               }
+                    orange_split_plane(); 
+              }
           }
-          in_beam_referential(p1, p7, p5) {
-               blue_mortaise();
+          in_beam_referential(p1, p5, p6) {
+               
+              orange_mortaise();
           }
-     } */
+          /* intersection() {
+               blue_mask();
+               head_in_beam_referential(p1, p7, p5);
+          } */
+    }
+
      
 }
 
@@ -328,8 +309,8 @@ module black_beam() {
           head_in_beam_referential(p1, p4, p2);
         
           head_in_beam_referential(p1, p3, p7);
-       head_in_beam_referential(p1, p7, p5) ;
-          head_in_beam_referential(p1, p6, p4) ;
+          head_in_beam_referential(p1, p7, p5) ;
+         // head_in_beam_referential(p1, p6, p4) ;
    
          red_mortaise_mask();
          green_mortaise_mask();
@@ -338,8 +319,14 @@ module black_beam() {
 
          in_beam_referential(p1, p5, p6) {
                orange_mortaise();
-          } 
+          }
+
+         // pink_beam();
+         
            //    orange_beam();
+          in_beam_referential(p1, p7, p5) {
+               blue_mortaise();
+          }
 /*
           in_beam_referential(p1, p7, p5) {
                blue_mortaise();
@@ -414,19 +401,12 @@ module blue_beam() {
                translate([-BeamDiameter/2, 0, 0]) {
                     cube([2*BeamDiameter, BeamDiameter, BeamDiameter], center=true);
                };
-              // blue_mortaise();
+              blue_mortaise();
           };
 
-       /*   intersection() {
-               in_beam_referential(p1, p3, p7) {
-                    red_mortaise();
-               }
-               head_in_beam_referential(p1, p3, p7);
-          } */
-          // black_lip_splitter();
+          red_beam();
+       //   orange_beam();
 
-          //  head_in_beam_referential(p1, p5, p6);
-         
      }
 
    
@@ -437,13 +417,13 @@ module pink_beam() {
      difference() {
           beam(p1, p6, p4, "pink") {
                // this one has a pin on the inside, slighly torn inside
-
                translate([-BeamDiameter/2, 0, 0]) {
                     cube([2*BeamDiameter, BeamDiameter, BeamDiameter], center=true);
                };
-      
           };
-         // head_in_beam_referential(p1, p5, p6);
+          green_beam();
+        
+        //  orange_beam();
      }
 
     
@@ -465,19 +445,22 @@ module orange_splitter() {
      in_beam_referential(p1, p5, p6, "red") {
           rotate([0, 0, SplitPlaneAngle]) {
           translate([-BeamDiameter/3, 0, 0]) {
-               cube([BeamDiameter, 2*BeamDiameter, 2*BeamDiameter], center=true);
+               cube([BeamDiameter, 1.5*BeamDiameter, 1.5*BeamDiameter], center=true);
           };
           }
-          }
+     }
 }
+
 
 module orange_beam() {
      difference() {
           beam(p1, p5, p6, "orange") {
-               translate([-BeamDiameter/3, 0, 0]) {
-                //    cube([BeamDiameter, BeamDiameter, BeamDiameter], center=true);
-               };
-         //     orange_mortaise();
+               union() {
+                   }; 
+               translate([20, 0, 0]) {
+                    cylinder(10*BeamDiameter,BeamDiameter/2,BeamDiameter/2,$fn=3);
+               }
+             
                
           };
           
@@ -485,9 +468,9 @@ module orange_beam() {
 
           orange_splitter();
           
-          head_in_beam_referential(p1, p7, p5) ;
+        /*  head_in_beam_referential(p1, p7, p5) ;
           head_in_beam_referential(p1, p6, p4) ;
-             
+          */   
      }
 
      // this is a bit dirty. we may want to rewrite all this if rendering gets too slow.
@@ -517,32 +500,33 @@ module orange_beam() {
 
 
 prepare_for_stl(p1, p4, p2) {
- green_beam();
+green_beam();
 }
 
 translate([0, 0, 0]){
      prepare_for_stl(p1, p3, p7) {
-      red_beam();
+     red_beam();
      }
 }
 
-prepare_for_stl(p1, p3, p7) {
-   // blue_beam();
+prepare_for_stl(p1, p7, p5) {
+    blue_beam();
 }
 
 
 prepare_for_stl(p1, p2, p3) {
-//black_beam();
+    black_beam();
     
 }
 
 prepare_for_stl(p1, p6, p4) {
-     //  pink_beam();
+pink_beam();
 } 
 
 translate([0, 0, 0]) {
 prepare_for_stl(p1, p5, p6) {
-     orange_beam();
+ //  orange_beam();
 }
 
 }
+
