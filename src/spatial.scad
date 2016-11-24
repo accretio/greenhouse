@@ -6,7 +6,7 @@ BeamDiameter=20;
 BeamLip=10;
 
 
-PrepareForSTL=false;
+PrepareForSTL=true;
 // old beam stuff, needed for the wireframe
 
 module element(length, diameter, c) {
@@ -142,6 +142,15 @@ module green_tenon() {
 }
 
 
+module green_tenon_mask() {
+     rotate([-90, 0, 0]) {
+          translate([BeamDiameter/4,  -BeamDiameter/2,  -BeamDiameter/4 ]) {
+               cube([BeamDiameter/2, BeamDiameter/2 + BeamDiameter, BeamDiameter/4 ], center=true);
+          }
+     }
+}
+
+
 module blue_tenon() {
      translate([BeamDiameter/4, 0, 0]) {
           cube([BeamDiameter/2, BeamDiameter/3, BeamDiameter], center=true);
@@ -150,7 +159,7 @@ module blue_tenon() {
 
 module pink_tenon() {
      translate([BeamDiameter/4, BeamDiameter/6, -BeamDiameter/8]) {
-          cube([BeamDiameter/2, BeamDiameter/3, BeamDiameter/3], center=true);
+          cube([BeamDiameter/2, BeamDiameter/4, BeamDiameter/2], center=true);
      }
 }
 
@@ -180,7 +189,7 @@ module orange_tenon() {
       translate([BeamDiameter/3, -BeamDiameter/8, BeamDiameter/4]) {
           cube([BeamDiameter, BeamDiameter/8, BeamDiameter/8], center=true);
      }
-        translate([BeamDiameter/3, BeamDiameter/8, -BeamDiameter/4]) {
+        translate([BeamDiameter/3, BeamDiameter/6, -BeamDiameter/4]) {
           cube([BeamDiameter, BeamDiameter/8, BeamDiameter/8], center=true);
      }
     
@@ -288,7 +297,7 @@ module black_beam() {
           }; 
           
           in_beam_referential(p1, p4, p2) {
-               green_tenon();
+               green_tenon_mask();
           }; 
           
           in_beam_referential(p1, p3, p7) {
@@ -297,7 +306,10 @@ module black_beam() {
 
           in_beam_referential(p1, p5, p6) {
               orange_tenon();
-          }; 
+          };
+
+          head_in_beam_referential(p1, p4, p2) {};
+          head_in_beam_referential(p1, p3, p7) {};
        
 
           
@@ -358,8 +370,12 @@ module pink_beam() {
           in_beam_referential(p1, p4, p2){
                green_tenon();
           }
+          in_beam_referential(p1, p5, p6) {
+               orange_tenon();
+          }
      }
-
+   
+     
     
 }
 
@@ -385,12 +401,6 @@ module orange_splitter() {
      }
 }
 
-
-in_beam_referential(p1, p5, p6) {
-    orange_tenon();
-}
-
- 
 
 
 module orange_beam() {
@@ -435,13 +445,18 @@ module orange_beam() {
 
 
 
+
+in_beam_referential(p1, p4, p2) {
+   // green_tenon_mask();
+}
+
 prepare_for_stl(p1, p4, p2) {
-    green_beam();
+    //green_beam();
 }
 
 translate([0, 0, 0]){
      prepare_for_stl(p1, p3, p7) {
-              red_beam();
+         //     red_beam();
           
      }
 }
@@ -451,17 +466,17 @@ prepare_for_stl(p1, p7, p5) {
     // blue_tenon();
 
      } 
-     blue_beam();
+   //  blue_beam();
 }
 
 
 prepare_for_stl(p1, p2, p3) {
-//  black_beam();
+ black_beam();
     
 }
 
 prepare_for_stl(p1, p6, p4) {
-    pink_beam();
+  // pink_beam();
 } 
 
 translate([0, 0, 0]) {
