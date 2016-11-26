@@ -43,13 +43,13 @@ module create_wire(points, triangles) {
 }
 
 
+TextHeight=5;
 
-module beam(p1, p2, p3, color) {
+module beam(p1, p2, p3, color, label) {
      ref_38_31 = new_cs(origin=p1,axes=[(p2-p1), cross((p2-p1), (p3-p1))]);
-     if (showAxes)
-          show_cs(ref_38_31);
      in_cs(ref_38_31) {
           color(color) {
+             
                intersection() {
                     union() {
                          difference() {
@@ -59,6 +59,15 @@ module beam(p1, p2, p3, color) {
                                    }
                               }
                               children(0);
+                              if (PrepareForSTL) {
+                                   translate([ScaleFactor * norm((p2-p1)) - TextHeight, 0, 0]) {
+                                        rotate([0, 90, 0]) {
+                                             linear_extrude(TextHeight) {
+                                                  text(label, halign="center", valign="center", size=6);
+                                             }
+                                        }
+                                   }
+                              }
                          };
                          children(1) ;
                     }
@@ -242,7 +251,7 @@ module green_beam() {
      //  green_mask();
      difference() {
           union() {
-               beam(p1, p4, p2, "green", showAxes=false) {
+               beam(p1, p4, p2, "green", label="G") {
                     translate([-BeamDiameter/2, 0, 0]) {
                          cube([2*BeamDiameter, BeamDiameter, BeamDiameter], center=true);
                     };
@@ -272,7 +281,7 @@ module green_beam() {
 module red_beam() {
      difference() {
           union() {
-               beam(p1, p3, p7, "red") {
+               beam(p1, p3, p7, "red", label="R") {
                     translate([-BeamDiameter/2, 0, 0]) {
                          cube([2*BeamDiameter, BeamDiameter, BeamDiameter], center=true);
                     };
@@ -322,7 +331,7 @@ module black_lip_splitter() {
 module black_beam() {
      
      difference() {
-          beam(p1, p2, p3, "black", lip=BeamDiameter) {
+          beam(p1, p2, p3, "black", label="BL") {
           }; 
           
           orange_split_plane();
@@ -357,7 +366,7 @@ module blue_beam() {
      
       
      difference() {
-          beam(p1, p7, p5, "blue") {
+          beam(p1, p7, p5, "blue", label="B") {
                // adding the tenon
                translate([-BeamDiameter/2, 0, 0]) {
                     cube([2*BeamDiameter, BeamDiameter, BeamDiameter], center=true);
@@ -386,7 +395,7 @@ module blue_beam() {
 
 module pink_beam() {
      difference() {
-          beam(p1, p6, p4, "pink") {
+          beam(p1, p6, p4, "pink", label="P") {
                // this one has a pin on the inside, slighly torn inside
                translate([-BeamDiameter/2, 0, 0]) {
                     cube([2*BeamDiameter, BeamDiameter, BeamDiameter], center=true);
@@ -439,7 +448,7 @@ module orange_splitter() {
 
 module orange_beam() {
      difference() {
-          beam(p1, p5, p6, "orange") {
+          beam(p1, p5, p6, "orange", label="O") {
           };
           in_beam_referential(p1, p5, p6) {
                orange_mortise();
@@ -452,7 +461,7 @@ module orange_beam() {
               head_in_beam_referential(p1, p6, p4) ;
           */   
      }
-      in_beam_referential(p1, p5, p6) {
+      in_beam_referential_inside_beam(p1, p5, p6) {
                orange_tenon();
                
           }
@@ -485,34 +494,34 @@ module orange_beam() {
 
 
 prepare_for_stl(p1, p4, p2) {
- // green_beam();
+ //green_beam();
 }
 
 translate([0, 0, 0]){
      prepare_for_stl(p1, p3, p7) {
-    //  red_beam();
+       //    red_beam();
       
      }
 }
 
 prepare_for_stl(p1, p7, p5) {
    
-  // blue_beam();
+//  blue_beam();
 }
 
 
 prepare_for_stl(p1, p2, p3) {
-black_beam();
+//black_beam();
     
 }
 
 prepare_for_stl(p1, p6, p4) {
-// pink_beam();
+   //  pink_beam();
 } 
 
 translate([0, 0, 0]) {
      prepare_for_stl(p1, p5, p6) {
-       //orange_beam();
+       orange_beam();
      }
 
 }
