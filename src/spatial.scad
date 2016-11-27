@@ -6,7 +6,10 @@ BeamDiameter=20;
 BeamLip=10;
 
 
-PrepareForSTL=false;
+PrepareForSTL=true;
+STLSpacing=5;
+Tolerance=0.2;
+
 // old beam stuff, needed for the wireframe
 
 module element(length, diameter, c) {
@@ -83,12 +86,14 @@ module beam(p1, p2, p3, color, label) {
 
 // helpers to change coordinate systems
 
-module prepare_for_stl(p1, p2, p3) {
+module prepare_for_stl(p1, p2, p3, pos) {
      if (PrepareForSTL) {
-          rotate([0, 90, 0]) {
-               ref_38_31 = new_cs(origin=p1,axes=[(p2-p1), cross((p2-p1), (p3-p1))]);
-               back_to_absolute(ref_38_31) {
-                    children(); 
+          translate([ (STLSpacing + BeamDiameter) * (pos % 2), (STLSpacing + BeamDiameter) * (-1 + round((pos + 1) / 2)), 0]) {
+               rotate([0, 90, 0]) {
+                    ref_38_31 = new_cs(origin=p1,axes=[(p2-p1), cross((p2-p1), (p3-p1))]);
+                    back_to_absolute(ref_38_31) {
+                         children(); 
+                    }
                }
           }
      } else {
@@ -152,70 +157,61 @@ p6 = points2[33];
 p7 = points2[36];
 
 // let's print the joint beams
-module red_tenon() {
+module red_tenon(tolerance=0) {
      rotate([30, 0, 0]) {
           translate([BeamDiameter/3,  BeamDiameter/6, 0]) {
-               cube([BeamDiameter/3, BeamDiameter/4, BeamDiameter/2 ], center=true);
+               cube([BeamDiameter/3, BeamDiameter/4-(2*tolerance), BeamDiameter/2 - (2*tolerance) ], center=true);
           }
      };
 }
 
-module green_tenon() {
-     translate([BeamDiameter/2 - BeamDiameter/8, 0, -BeamDiameter/4]) {
-          cube([BeamDiameter/4, BeamDiameter/2, BeamDiameter/4 ], center=true);
+module green_tenon(tolerance=0) {
+     translate([BeamDiameter/2 - BeamDiameter/8 + tolerance, 0, -BeamDiameter/4]) {
+          cube([BeamDiameter/4, BeamDiameter/2-(2*tolerance), BeamDiameter/4 -(2*tolerance) ], center=true);
+     }
+}
+
+module blue_tenon(tolerance=0) {
+     translate([BeamDiameter/3 + tolerance, -BeamDiameter/4, 0]) {
+          cube([BeamDiameter/3, BeamDiameter/4-(2*tolerance), BeamDiameter-(2*tolerance)], center=true);
+     }
+}
+
+module pink_tenon(tolerance=0) {
+     translate([BeamDiameter/3 + tolerance, BeamDiameter/6, 0]) {
+          cube([BeamDiameter/3, BeamDiameter/4-(2*tolerance), BeamDiameter/2-(2*tolerance)], center=true);
      }
 }
 
 
-
-module blue_tenon() {
-     translate([BeamDiameter/3, -BeamDiameter/4, 0]) {
-          cube([BeamDiameter/3, BeamDiameter/4, BeamDiameter], center=true);
+module orange_tenon(tolerance=0) {
+     translate([BeamDiameter/2 -tolerance, -BeamDiameter/8, -BeamDiameter/4]) {
+          cube([2*BeamDiameter, BeamDiameter/8 -(2*tolerance), BeamDiameter/8 -(2*tolerance)], center=true);
      }
-}
-
-module pink_tenon() {
-     translate([BeamDiameter/3, BeamDiameter/6, 0]) {
-          cube([BeamDiameter/3, BeamDiameter/4, BeamDiameter/2], center=true);
+     translate([BeamDiameter/2 - tolerance, BeamDiameter/6, -BeamDiameter/6]) {
+          cube([2*BeamDiameter, BeamDiameter/8 -(2*tolerance), BeamDiameter/8 -(2*tolerance) ], center=true);
      }
-}
-
-module blue_mask() {
-     in_beam_referential(p1, p7, p5) {
-          translate([BeamDiameter/6, 0, BeamDiameter/4]) {
-               cube([BeamDiameter/3, BeamDiameter, BeamDiameter], center=true);
-          }
+     translate([BeamDiameter/2 - tolerance, -BeamDiameter/8, BeamDiameter/4]) {
+          cube([2*BeamDiameter, BeamDiameter/8 -(2*tolerance), BeamDiameter/8-(2*tolerance)], center=true);
      }
-}
-
-module orange_tenon() {
-     translate([BeamDiameter/2, -BeamDiameter/8, -BeamDiameter/4]) {
-          cube([2*BeamDiameter, BeamDiameter/8, BeamDiameter/8], center=true);
+     translate([BeamDiameter/2 -  tolerance, -BeamDiameter/3, BeamDiameter/6]) {
+         cube([2*BeamDiameter, BeamDiameter/8-(2*tolerance), BeamDiameter/8-(2*tolerance)], center=true);
      }
-     translate([BeamDiameter/2, BeamDiameter/6, -BeamDiameter/6]) {
-          cube([2*BeamDiameter, BeamDiameter/8, BeamDiameter/8], center=true);
-     }
-     translate([BeamDiameter/2, -BeamDiameter/8, BeamDiameter/4]) {
-          cube([2*BeamDiameter, BeamDiameter/8, BeamDiameter/8], center=true);
-     }
-     translate([BeamDiameter/2, -BeamDiameter/3, BeamDiameter/6]) {
-          cube([2*BeamDiameter, BeamDiameter/8, BeamDiameter/8], center=true);
-     }
-     translate([BeamDiameter/2, BeamDiameter/4, BeamDiameter/8]) {
-          cube([BeamDiameter, BeamDiameter/4, BeamDiameter/4], center=true);
+     translate([BeamDiameter/2 -  tolerance, BeamDiameter/4, BeamDiameter/8]) {
+         cube([BeamDiameter, BeamDiameter/6-(2*tolerance), BeamDiameter/6-(2*tolerance)], center=true);
      }    
 }
 
-module orange_mortise() {
+module orange_mortise(tolerance=0) {
    
-     translate([BeamDiameter/2, 0, -BeamDiameter/3]) {
-          cube([BeamDiameter/2, BeamDiameter/4, BeamDiameter/2], center=true);
+     translate([BeamDiameter/2 - tolerance, 0, -BeamDiameter/3]) {
+          cube([BeamDiameter/2, BeamDiameter/4 - 2*tolerance, BeamDiameter/2  - 2*tolerance], center=true);
      }
-     translate([BeamDiameter/2, 0, BeamDiameter/3]) {
-          cube([BeamDiameter/2, BeamDiameter/4, BeamDiameter], center=true);
+     translate([BeamDiameter/2 - tolerance, 0, BeamDiameter/3]) {
+          cube([BeamDiameter/2, BeamDiameter/4 - 2*tolerance, BeamDiameter - 2*tolerance], center=true);
      }
-     translate([BeamDiameter/4, 0, 0]) {
-          cube([BeamDiameter/4, BeamDiameter/4, BeamDiameter], center=true);
+     translate([BeamDiameter/4 - tolerance, 0, 0]) {
+          cube([BeamDiameter/4, BeamDiameter/4 - 2*tolerance, BeamDiameter - 2*tolerance], center=true);
      }
      
 }
@@ -228,7 +224,7 @@ module green_beam() {
                     translate([-BeamDiameter/2, 0, 0]) {
                          cube([2*BeamDiameter, BeamDiameter, BeamDiameter], center=true);
                     };
-                    green_tenon();
+                    green_tenon(Tolerance);
                };
           }
           orange_split_plane();
@@ -250,7 +246,7 @@ module red_beam() {
                     translate([-BeamDiameter/2, 0, 0]) {
                          cube([2*BeamDiameter, BeamDiameter, BeamDiameter], center=true);
                     };
-                    red_tenon();
+                    red_tenon(Tolerance);
                }; 
                
               
@@ -294,7 +290,7 @@ module black_beam() {
           }; 
 
           in_beam_referential(p1, p5, p6) {
-               orange_tenon();
+               orange_tenon(-Tolerance);
           };
 
           
@@ -318,7 +314,7 @@ module blue_beam() {
                
           };
           red_beam();
-          orange_beam();
+         orange_beam(Tolerance);
      }
      difference() {
           in_beam_referential_inside_beam(p1, p7, p5) {
@@ -328,14 +324,14 @@ module blue_beam() {
           }
           orange_splitter();
           orange_vertical_splitter2();
-          orange_beam();
+          orange_beam(Tolerance);
      }
      difference() {
           in_beam_referential_inside_beam(p1, p7, p5) {
-               blue_tenon();
+               blue_tenon(Tolerance);
           }
           orange_split_plane();
-         
+          orange_beam(Tolerance);
      }
 
    
@@ -370,8 +366,6 @@ module pink_beam() {
                               cube([2*BeamDiameter, BeamDiameter, BeamDiameter], center=true);
                          };
                     };
-                    green_beam();
-        
                }
                difference() {
                     in_beam_referential_inside_beam(p1, p6, p4) {
@@ -382,11 +376,11 @@ module pink_beam() {
                     orange_splitter();
                }
                in_beam_referential(p1, p6, p4) {
-                    pink_tenon();
+                    pink_tenon(Tolerance);
                }
         
           }
-          orange_beam();
+          orange_beam(Tolerance);
           orange_vertical_splitter();
      }
     
@@ -416,58 +410,60 @@ module orange_splitter() {
 
 
 
-module orange_beam() {
+module orange_beam(tolerance=0) {
      difference() {
           beam(p1, p5, p6, "orange", label="O") {
           };
           in_beam_referential(p1, p5, p6) {
-               orange_mortise();
-               
-          }
-
+               orange_mortise(tolerance);
+          };
           orange_splitter();
-
      }
      in_beam_referential_inside_beam(p1, p5, p6) {
-          orange_tenon();
+          orange_tenon(-tolerance);
           
      } 
-
- 
+     
 }
 
 
 
 // stuff needed to 3d print the model - it is much easier if they are back in a normal referential
 
-create_wire(points2, triangles2); 
+//create_wire(points2, triangles2); 
 
 
+/*
 
-
-prepare_for_stl(p1, p4, p2) {
+prepare_for_stl(p1, p4, p2, 0) {
      green_beam();
 }
 
-prepare_for_stl(p1, p3, p7) {
+
+prepare_for_stl(p1, p3, p7, 1) {
      red_beam();
      
 }
 
-prepare_for_stl(p1, p7, p5) { 
+
+
+prepare_for_stl(p1, p7, p5, 2) { 
      blue_beam();
 }
 
-prepare_for_stl(p1, p2, p3) {
-     black_beam();    
-}
 
-prepare_for_stl(p1, p6, p4) {
+prepare_for_stl(p1, p6, p4, 3) {
      pink_beam();
     
-} 
+} */
 
-prepare_for_stl(p1, p5, p6) {
-     orange_beam();
+
+prepare_for_stl(p1, p5, p6, 4) {
+ //    orange_beam();
+}
+
+
+prepare_for_stl(p1, p2, p3, 5) {
+     black_beam();    
 }
 
