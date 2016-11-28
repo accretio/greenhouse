@@ -143,7 +143,7 @@ module head_in_beam_referential(p1, p2, p3) {
 /*
 
   p6  p5  p7
-  p1  
+      p1  
   p4  p2  p3
 
 */
@@ -430,7 +430,7 @@ module orange_beam(tolerance=0) {
 
 // stuff needed to 3d print the model - it is much easier if they are back in a normal referential
 
-//create_wire(points2, triangles2); 
+create_wire(points2, triangles2); 
 
 
 /*
