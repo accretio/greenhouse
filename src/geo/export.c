@@ -25,7 +25,6 @@
 
 struct beam_t {
   int point;
-  int position; // we are going to number f
   int color;
   
   // some helpers
@@ -125,18 +124,9 @@ int joint_cardinality(struct joint_t *joint) {
 
 static int
 compare_beams(const void *p1, const void *p2)
-{
- 
+{  
   struct beam_t *beam1 = (struct beam_t *)p1;
   struct beam_t *beam2 = (struct beam_t *)p2;
-  
-  // the comparison function is not really trivial to write
-  //
-  //
-  // we want the beam with the lowest point to be the 0 (black)
-  // we want the beam with the highest point to be the top (orange)
-  //
-
   return (beam1->color - beam2->color);
 }
 
@@ -156,16 +146,6 @@ int sort_joint(flo_t *points, struct joint_t *joint) {
 
   c = joint_cardinality(joint);
  
-  /*  void qsort(void *base, size_t nmemb, size_t size,
-      int (*compar)(const void *, const void *));
-
-      void qsort_r(void *base, size_t nmemb, size_t size,
-      int (*compar)(const void *, const void *, void *),
-      void *arg);
-  */
-  // qsort_r(joint->beams, c, sizeof(struct beam_t), points, compare_beams);
-  // return 0;
-
   switch(c) {
   case 0:
     // silently ignore this joint
@@ -173,17 +153,16 @@ int sort_joint(flo_t *points, struct joint_t *joint) {
   case 6:
     printf("sorting joint with cardinality 6\n");
     
-    // we want the beam with the lowest point to be the 0 (black)
-    // we want the beam with the highest point to be the top (orange)
-
+    // we want the beam with the highest X point to be the 0 (black)
+   
     int lowest_beam = 0;
    
     for (int i=1; i < c; i++) {
-      if (BEAM_POINT_Z(i) < BEAM_POINT_Z(lowest_beam)) {
+      if (BEAM_POINT_X(i) > BEAM_POINT_X(lowest_beam)) {
         lowest_beam = i;
       }
     }
-    printf("lowest: %d\n", lowest_beam);
+    printf("lowest: %d\n", joint->beams[lowest_beam].point);
 
     // here we have the black beam. now we need to move all the other points into the new referential
 
@@ -270,7 +249,7 @@ int sort_joint(flo_t *points, struct joint_t *joint) {
     for (int i = 0; i < c; i++) {
       if (i != lowest_beam) {
         flo_t *in_black_referential = joint->beams[i].in_black_referential;
-        if (in_black_referential[1] < 0 && in_black_referential[X] > max_x) {
+        if (in_black_referential[Y] < 0 && in_black_referential[X] > max_x) {
           green = i;
           max_x = in_black_referential[X];
         }
@@ -282,7 +261,7 @@ int sort_joint(flo_t *points, struct joint_t *joint) {
     for (int i = 0; i < c; i++) {
       if (i != lowest_beam) {
         flo_t *in_black_referential = joint->beams[i].in_black_referential;
-        if (in_black_referential[1] > 0 && in_black_referential[0] > max_x) {
+        if (in_black_referential[Y] > 0 && in_black_referential[0] > max_x) {
           red = i;
           max_x = in_black_referential[X];
         }
@@ -299,7 +278,7 @@ int sort_joint(flo_t *points, struct joint_t *joint) {
     for (int i = 0; i < c; i++) {
       if (i != lowest_beam && i != green && i != red) {
         flo_t *in_black_referential = joint->beams[i].in_black_referential;
-        if (in_black_referential[1] < 0 && in_black_referential[X] > max_x) {
+        if (in_black_referential[Y] < 0 && in_black_referential[X] > max_x) {
           pink = i;
           max_x = in_black_referential[X];
         }
@@ -313,7 +292,7 @@ int sort_joint(flo_t *points, struct joint_t *joint) {
     for (int i = 0; i < c; i++) {
       if (i != lowest_beam && i != green && i != red && i != pink) {
         flo_t *in_black_referential = joint->beams[i].in_black_referential;
-        if (in_black_referential[1] > 0 && in_black_referential[X] > max_x) {
+        if (in_black_referential[Y] > 0 && in_black_referential[X] > max_x) {
           blue = i;
           max_x = in_black_referential[X];
         }
@@ -329,7 +308,11 @@ int sort_joint(flo_t *points, struct joint_t *joint) {
       }
     }
 
-    printf("center: %d, black: %d, green: %d, pink: %d, orange: %d, blue: %d, red: %d\n", joint->center, lowest_beam, green, pink, orange, blue, red); 
+#define PT(__id__) joint->beams[__id__].point
+    
+    printf("center: %d, black: %d, green: %d, pink: %d, orange: %d, blue: %d, red: %d\n", joint->center,
+           PT(lowest_beam),
+           PT(green), PT(pink), PT(orange), PT(blue), PT(red)); 
 
 
 
@@ -337,10 +320,13 @@ int sort_joint(flo_t *points, struct joint_t *joint) {
     // now we use that information to tag the beams
 
     joint->beams[lowest_beam].color = BLACK;
+    printf("color of the beam: %d\n", joint->beams[lowest_beam].color);
     joint->beams[green].color = GREEN;
     joint->beams[pink].color = PINK;
     joint->beams[orange].color = ORANGE;
     joint->beams[blue].color = BLUE;
+      printf("color of the beam: %d\n", joint->beams[blue].color);
+  
     joint->beams[red].color = RED;
         
     break;
@@ -372,7 +358,7 @@ int export_joint(flo_t *points, struct joint_t *joint) {
 
     // the we print the points.
 
-    printf("[%d, %d, %d, %d, %d, %d, %d]",
+    printf("[%d, %d, %d, %d, %d, %d, %d],\n",
            joint->center,
            joint->beams[0].point,
            joint->beams[1].point,
@@ -402,7 +388,8 @@ int main() {
     for (int j = 0; j < MAX_JOINT_CARDINALITY; ++j) {
       joints[i].center = i;
       joints[i].beams[j].point = 0;
-      joints[i].beams[j].position = 0;
+      joints[i].beams[j].color = -1;
+      
     }
   }
   
@@ -440,8 +427,7 @@ int main() {
   // at this point we need to order the points for each joints
   
   for (int i=0; i < dome.sphere.numPoints; ++i) {
-    struct joint_t joint = joints[i];
-    sort_joint(dome.sphere.points, &joint);
+    sort_joint(dome.sphere.points, &(joints[i]));
   }
 
 
@@ -453,9 +439,6 @@ int main() {
   for (int i=0; i < dome.sphere.numPoints; ++i) {
     struct joint_t joint = joints[i];
     export_joint(dome.sphere.points, &joint);
-    if (i < dome.sphere.numPoints - 1) {
-      printf(",\n");
-    }
   }
 
   printf("];\n\n");

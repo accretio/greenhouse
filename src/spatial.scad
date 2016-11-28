@@ -2,48 +2,13 @@ include <data.scad>
 include <local.scad>
 
 ScaleFactor=0.5;
-BeamDiameter=20;
+BeamDiameter=10;
 BeamLip=10;
 
 
 PrepareForSTL=true;
 STLSpacing=5;
 Tolerance=0.2;
-
-// old beam stuff, needed for the wireframe
-
-module element(length, diameter, c) {
-     color(c) {
-          translate([0, 0, length/2]) {
-               cylinder(length, diameter/2, diameter/2, length, center=true);
-          }
-     }
-}
-
-module wire(p1, p2, diameter, color) {
-     axle = p2-p1;
-     length = norm(axle); 
-       
-     b = acos(axle[2]/length); // inclination angle
-     c = atan2(axle[1], axle[0]);     // azimuthal angle
- 
-     translate(p1) {
-          rotate([0, b, c]) {
-               element(length, diameter, color);
-          }
-     }
-}
-
-module create_wire(points, triangles) {
-     for(triangle=triangles) {
-          p1 = points[triangle[0]]; 
-          p2 = points[triangle[1]]; 
-          p3 = points[triangle[2]];
-          wire(p1, p2, 1);
-          wire(p2, p3, 1);
-          wire(p3, p1, 1);
-     }
-}
 
 
 TextHeight=5;
@@ -148,14 +113,6 @@ module head_in_beam_referential(p1, p2, p3) {
 
 */
 
-p1 = points2[38]; 
-p2 = points2[1]; 
-p3 = points2[39]; 
-p4 = points2[31]; 
-p5 = points2[11]; 
-p6 = points2[33];
-p7 = points2[36];
-
 // let's print the joint beams
 module red_tenon(tolerance=0) {
      rotate([30, 0, 0]) {
@@ -217,7 +174,7 @@ module orange_mortise(tolerance=0) {
 }
 
 
-module green_beam() {
+module green_beam(p1, p2, p3, p4, p5, p6, p7) {
      difference() {
           union() {
                beam(p1, p4, p2, "green", label="G") {
@@ -239,7 +196,7 @@ module green_beam() {
 }
 
 
-module red_beam() {
+module red_beam(p1, p2, p3, p4, p5, p6, p7) {
      difference() {
           union() {
                beam(p1, p3, p7, "red", label="R") {
@@ -259,7 +216,7 @@ module red_beam() {
                blue_tenon();
           }
 
-          orange_split_plane();
+          orange_split_plane(p1, p2, p3, p4, p5, p6, p7);
 
      }
 
@@ -267,13 +224,13 @@ module red_beam() {
 }
 
  
-module black_beam() {
+module black_beam(p1, p2, p3, p4, p5, p6, p7) {
      
      difference() {
           beam(p1, p2, p3, "black", label="BL") {
           }; 
           
-          orange_split_plane();
+          orange_split_plane(p1, p2, p3, p4, p5, p6);
 
 
           in_beam_referential(p1, p6, p4) {
@@ -305,7 +262,7 @@ module black_beam() {
      
 }
 
-module blue_beam() {
+module blue_beam(p1, p2, p3, p4, p5, p6, p7) {
      difference() {
           beam(p1, p7, p5, "blue", label="B") {
                translate([-BeamDiameter/2, 0, 0]) {
@@ -314,7 +271,7 @@ module blue_beam() {
                
           };
           red_beam();
-         orange_beam(Tolerance);
+         orange_beam(p1, p2, p3, p4, p5, p6, p7, Tolerance);
      }
      difference() {
           in_beam_referential_inside_beam(p1, p7, p5) {
@@ -322,23 +279,23 @@ module blue_beam() {
                     cube([2*BeamDiameter, BeamDiameter, BeamDiameter], center=true);
                }; 
           }
-          orange_splitter();
-          orange_vertical_splitter2();
-          orange_beam(Tolerance);
+          orange_splitter(p1, p2, p3, p4, p5, p6, p7);
+          orange_vertical_splitter2(p1, p2, p3, p4, p5, p6, p7);
+          orange_beam(p1, p2, p3, p4, p5, p6, p7, Tolerance);
      }
      difference() {
           in_beam_referential_inside_beam(p1, p7, p5) {
-               blue_tenon(Tolerance);
+               blue_tenon(p1, p2, p3, p4, p5, p6, p7, Tolerance);
           }
-          orange_split_plane();
-          orange_beam(Tolerance);
+          orange_split_plane(p1, p2, p3, p4, p5, p6, p7);
+          orange_beam(p1, p2, p3, p4, p5, p6, p7, Tolerance);
      }
 
    
      
 }
 
-module orange_vertical_splitter() {
+module orange_vertical_splitter(p1, p2, p3, p4, p5, p6, p7) {
      in_beam_referential(p1, p5, p6) {
           translate([0, 0, BeamDiameter]) {
                cube([2*BeamDiameter, 2*BeamDiameter, 2*BeamDiameter], center=true);
@@ -347,7 +304,7 @@ module orange_vertical_splitter() {
 }
 
 
-module orange_vertical_splitter2() {
+module orange_vertical_splitter2(p1, p2, p3, p4, p5, p6, p7) {
      in_beam_referential(p1, p5, p6) {
           translate([0, 0, -BeamDiameter]) {
                cube([2*BeamDiameter, 2*BeamDiameter, 2*BeamDiameter], center=true);
@@ -356,7 +313,7 @@ module orange_vertical_splitter2() {
 }
 
 
-module pink_beam() {
+module pink_beam(p1, p2, p3, p4, p5, p6, p7) {
      difference() {
           union() {
                difference() {
@@ -373,22 +330,22 @@ module pink_beam() {
                               cube([2*BeamDiameter, BeamDiameter, BeamDiameter], center=true);
                          }; 
                     }
-                    orange_splitter();
+                    orange_splitter(p1, p2, p3, p4, p5, p6, p7);
                }
                in_beam_referential(p1, p6, p4) {
                     pink_tenon(Tolerance);
                }
         
           }
-          orange_beam(Tolerance);
-          orange_vertical_splitter();
+          orange_beam(p1, p2, p3, p4, p5, p6, p7, Tolerance);
+          orange_vertical_splitter(p1, p2, p3, p4, p5, p6, p7);
      }
     
 }
 
 SplitPlaneAngle=0; // has to be 0 or we won't be able to slide the orange beam
 SplitPlanePosition=-BeamDiameter/3;
-module orange_split_plane() {
+module orange_split_plane(p1, p2, p3, p4, p5, p6, p7) {
      in_beam_referential(p1, p5, p6, "red") {
           rotate([0, 0, SplitPlaneAngle]) {
                translate([SplitPlanePosition + BeamDiameter, 0, 0]) {
@@ -398,7 +355,7 @@ module orange_split_plane() {
      }
 }
 
-module orange_splitter() {
+module orange_splitter(p1, p2, p3, p4, p5, p6, p7) {
      in_beam_referential(p1, p5, p6, "red") {
           rotate([0, 0, SplitPlaneAngle]) {
                translate([SplitPlanePosition, 0, 0]) {
@@ -410,14 +367,14 @@ module orange_splitter() {
 
 
 
-module orange_beam(tolerance=0) {
+module orange_beam(p1, p2, p3, p4, p5, p6, p7, tolerance=0) {
      difference() {
           beam(p1, p5, p6, "orange", label="O") {
           };
           in_beam_referential(p1, p5, p6) {
                orange_mortise(tolerance);
           };
-          orange_splitter();
+          orange_splitter(p1, p2, p3, p4, p5, p6, p7);
      }
      in_beam_referential_inside_beam(p1, p5, p6) {
           orange_tenon(-tolerance);
@@ -430,40 +387,34 @@ module orange_beam(tolerance=0) {
 
 // stuff needed to 3d print the model - it is much easier if they are back in a normal referential
 
+
+
 create_wire(points2, triangles2); 
 
 
-/*
 
-prepare_for_stl(p1, p4, p2, 0) {
-     green_beam();
-}
-
-
-prepare_for_stl(p1, p3, p7, 1) {
-     red_beam();
-     
-}
+green_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p);
 
 
 
-prepare_for_stl(p1, p7, p5, 2) { 
-     blue_beam();
-}
+red_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p);
+
+blue_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p);
+pink_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p);
 
 
-prepare_for_stl(p1, p6, p4, 3) {
-     pink_beam();
-    
-} */
+
+orange_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p);
+
+black_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p);
 
 
-prepare_for_stl(p1, p5, p6, 4) {
- //    orange_beam();
-}
 
-
-prepare_for_stl(p1, p2, p3, 5) {
-     black_beam();    
-}
+p1p = points2[38]; 
+p2p = points2[1]; 
+p3p = points2[39]; 
+p4p = points2[31]; 
+p5p = points2[11]; 
+p6p = points2[33];
+p7p = points2[36];
 
