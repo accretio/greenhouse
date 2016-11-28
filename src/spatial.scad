@@ -358,8 +358,8 @@ module orange_split_plane(p1, p2, p3, p4, p5, p6, p7) {
 module orange_splitter(p1, p2, p3, p4, p5, p6, p7) {
      in_beam_referential(p1, p5, p6, "red") {
           rotate([0, 0, SplitPlaneAngle]) {
-               translate([SplitPlanePosition, 0, 0]) {
-                    cube([BeamDiameter, 1.5*BeamDiameter, 1.5*BeamDiameter], center=true);
+               translate([SplitPlanePosition-BeamDiameter/2, 0, 0]) {
+                    cube([2*BeamDiameter, 1.5*BeamDiameter, 1.5*BeamDiameter], center=true);
                };
           }
      }

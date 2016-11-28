@@ -16,7 +16,7 @@ beams6 = [
      [39, 41, 10, 32, 38, 1, 36]
      ];
 
-create_wire(points2, triangles2);
+//create_wire(points2, triangles2);
 
 
 
