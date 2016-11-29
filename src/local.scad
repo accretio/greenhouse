@@ -141,19 +141,18 @@ module in_cs(cs){
 module back_to_absolute(cs){
 	origin = cs[0];
 	axes = cs[1];
-	x_rot = calculate_rotation_axis(axes[0],[1,0,0]);
-	y_rot = calculate_rotation_axis(axes[1],
-		rotation_matrix3(x_rot[0],x_rot[1])*[0,1,0]);
-       
-
-		//align y axes
-             rotate(x_rot[1], -x_rot[0]){
+	x_rot = calculate_rotation_axis(axes[0], [1,0,0]);
+	y_rot = calculate_rotation_axis(axes[1], rotation_matrix3(x_rot[0],x_rot[1])*[0,1,0]);
+        
+        
+        //align y axes
+        rotate(x_rot[1], -x_rot[0]){
              rotate(y_rot[1],-y_rot[0]){
                   //align x axes
-                  	translate(-origin){
-				child(0);
-			}
-		}
+                  translate(-origin){
+                       children();
+                  }
+             }
 	}
 }
 

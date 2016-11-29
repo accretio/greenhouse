@@ -1,5 +1,5 @@
 ScaleFactor=0.5;
-BeamDiameter=10;
+BeamDiameter=20;
 BeamLip=10;
 
 
@@ -49,7 +49,7 @@ module beam(p1, p2, p3, color, label) {
 
 // helpers to change coordinate systems
 
-module prepare_for_stl(p1, p2, p3, pos) {
+module prepare_for_stl(p1, p2, p3, pos=0) {
      if (PrepareForSTL) {
           translate([ (STLSpacing + BeamDiameter) * (pos % 2), (STLSpacing + BeamDiameter) * (-1 + round((pos + 1) / 2)), 0]) {
                rotate([0, 90, 0]) {
