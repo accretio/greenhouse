@@ -368,7 +368,16 @@ int export_joint(flo_t *points, struct joint_t *joint) {
            joint->beams[5].point);         
     
     break;
-    
+  case 5:
+    // they are not sorted yet
+    printf("[%d, %d, %d, %d, %d, %d],\n",
+           joint->center,
+           joint->beams[0].point,
+           joint->beams[1].point,
+           joint->beams[2].point,
+           joint->beams[3].point,
+           joint->beams[4].point);        
+    break; 
   default:
     break;
   }

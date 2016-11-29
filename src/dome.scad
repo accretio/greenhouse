@@ -2,6 +2,7 @@ include <data.scad>
 include <local.scad>
 include <wireframe.scad>
 use <spatial.scad>
+use <bottom_6joints.scad>
 
 beams6 = [
      [14, 12, 13, 7, 33, 34, 4],
@@ -16,14 +17,16 @@ beams6 = [
      [39, 41, 10, 32, 38, 1, 36]
      ];
 
-//create_wire(points2, triangles2);
+beams5 = [
+     [11, 34, 33, 35, 36, 38]
+     ];
 
+create_wire(points2, triangles2);
+ 
 
-
-
-module create_beams(points, beams) {
-
-     for(beam=beams) {
+module create_beams6(points, beams) {
+     beam = beams[0];
+     //for(beam=beams) {
           p1p = points[beam[0]];
           p2p = points[beam[1]];
           p3p = points[beam[2]];
@@ -32,16 +35,25 @@ module create_beams(points, beams) {
           p6p = points[beam[5]];
           p7p = points[beam[6]];
 
-          green_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p);
-          red_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p);
-          blue_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p);
+         green_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p);
+         red_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p);
+            
+          blue_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p); 
           pink_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p);
-          orange_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p);
+          orange_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p); 
+          
           black_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p);
           
-     }
+    // }
      
 }
 
 
-create_beams(points2, beams6);
+create_beams6(points2, beams6);
+
+
+
+
+//
+
+
