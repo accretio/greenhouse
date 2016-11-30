@@ -68,24 +68,21 @@ module create_beams6(points, beams) {
 }
 
 
-//create_wire(points2, triangles2);
-//create_beams6(points2, beams6);
-//create_beams5(points2, beams5);
+create_wire(points2, triangles2);
+create_beams6(points2, beams6);
+create_beams5(points2, beams5);
 
  
 
 difference() {
 
-    create_beams2(points2, beams2);
+     create_beams2(points2, beams2);
      translate([500, 0, 0]) {
          cube([1000, 1000, 1000], center=true);
      } 
-      
+     
     }
      
 
-
- 
- 
   
  
