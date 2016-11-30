@@ -151,7 +151,10 @@ int sort_joint(flo_t *points, struct joint_t *joint) {
   int c;
   int lowest_beam = 0;
   flo_t max_x = -INFINITY; 
-   
+
+  int beam1 = 0;
+  int beam2 = 0; 
+    
   c = joint_cardinality(joint);
  
   switch(c) {
@@ -432,6 +435,43 @@ int sort_joint(flo_t *points, struct joint_t *joint) {
     joint->beams[olive].color = OLIVE;
     
     break; 
+
+
+  case 4:
+    printf("---- %d\n", joint->center);
+    beam1 =0; 
+    for (int i=0; i < c; i++) {
+      printf(
+             "BEAM %d, %f\n",
+             (joint->beams[i].point),
+             BEAM_POINT_X(i)
+             );
+      if (BEAM_POINT_X(i) < BEAM_POINT_X(beam1)) {
+        beam1 = i;
+      }
+    }
+
+    beam2 =0;
+    if (beam1 == 0) {
+      beam2 = 1; 
+    }
+    for (int i=0; i < c; i++) {
+      if (i != beam1) {
+        if (BEAM_POINT_X(i) <= BEAM_POINT_X(beam2)) {
+          beam2 = i;
+        }
+      }
+    }
+
+    printf("result is %d %d\n", joint->beams[beam1].point,
+           joint->beams[beam2].point);
+           
+
+    joint->beams[beam1].color = -4;
+    joint->beams[beam2].color = -4;
+   
+
+    break;
     
   default:
     printf("skipping joint, cardinality is %d\n", c);
@@ -480,6 +520,16 @@ int export_joint(flo_t *points, struct joint_t *joint) {
            joint->beams[2].point,
            joint->beams[3].point,
            joint->beams[4].point);        
+    break;
+
+  case 4:
+    qsort(joint->beams, c, sizeof(struct beam_t), compare_beams);
+    printf("[%d, %d, %d],\n",
+           joint->center,
+           joint->beams[0].point,
+           joint->beams[1].point); 
+    
+    
     break; 
   default:
     break;

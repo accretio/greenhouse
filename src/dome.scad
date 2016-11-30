@@ -4,6 +4,7 @@ include <wireframe.scad>
 use <spatial.scad>
 use <bottom_6joints.scad>
 use <bottom_5joints.scad>
+include <bottom_2joints.scad>
 
 
 
@@ -30,9 +31,19 @@ beams6 = [
      [39, 41, 10, 32, 38, 1, 36]
      ];
 
+beams2 = [
+     [12, 14, 7],
+     [13, 14, 4],
+     [15, 7, 28],
+     [18, 4, 31],
+     [27, 28, 2],
+     [29, 2, 37],
+     [30, 31, 1],
+     [32, 1, 39],
+     [40, 10, 37],
+     [41, 10, 39],
+     ];
 
-
- 
 module create_beams6(points, beams) {
      for(beam=beams) {
           p1p = points[beam[0]];
@@ -57,12 +68,24 @@ module create_beams6(points, beams) {
 }
 
 
-create_wire(points2, triangles2);
-create_beams6(points2, beams6);
+//create_wire(points2, triangles2);
+//create_beams6(points2, beams6);
+//create_beams5(points2, beams5);
+
+ 
+
+difference() {
+
+    create_beams2(points2, beams2);
+     translate([500, 0, 0]) {
+         cube([1000, 1000, 1000], center=true);
+     } 
+      
+    }
+     
 
 
-create_beams5(points2, beams5);
-
-//
-
-
+ 
+ 
+  
+ 
