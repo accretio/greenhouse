@@ -152,7 +152,7 @@ module olive_beam(p1, p2, p3, p4, p5, p6) {
                olive_tenon();
                
           }
-          // purple_beam(p1, p2, p3, p4, p5, p6); 
+          purple_beam(p1, p2, p3, p4, p5, p6); 
      }
 }
 
@@ -166,19 +166,19 @@ module beam5(points) {
      p6p = points[beam[5]];
 
      
-  /*   prepare_for_stl(p1p, p6p, p5p, 0) {
-          cyan_beam(p1p, p2p, p3p, p4p, p5p, p6p);
-     }
-     prepare_for_stl(p1p, p5p, p3p, 1) {
+    prepare_for_stl(p1p, p6p, p5p, 0) {
+      //    cyan_beam(p1p, p2p, p3p, p4p, p5p, p6p);
+     } 
+    /* prepare_for_stl(p1p, p5p, p3p, 1) {
           tomato_beam(p1p, p2p, p3p, p4p, p5p, p6p);
-     }
-     prepare_for_stl(p1p, p4p, p6p, 2) {
-          olive_beam(p1p, p2p, p3p, p4p, p5p, p6p);
-     }
-     prepare_for_stl(p1p, p3p, p2p, 3) {
-          silver_beam(p1p, p2p, p3p, p4p, p5p, p6p);
      }*/
-     prepare_for_stl(p1p, p2p, p4p, 4) {
+     prepare_for_stl(p1p, p4p, p6p, 2) {
+      //    olive_beam(p1p, p2p, p3p, p4p, p5p, p6p);
+     }
+    prepare_for_stl(p1p, p3p, p2p, 3) {
+         // silver_beam(p1p, p2p, p3p, p4p, p5p, p6p);
+     } 
+      prepare_for_stl(p1p, p2p, p4p, 4) {
           purple_beam(p1p, p2p, p3p, p4p, p5p, p6p);
      }
      
