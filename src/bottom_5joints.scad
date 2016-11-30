@@ -11,8 +11,6 @@ include <utils.scad>
 
 */
 
-beam = [2, 35, 28, 37, 27, 29]; //[11, 34, 33, 35, 36, 38];
-
 module purple_tenon(tolerance=0.0) {
      translate([0, 0, -BeamDiameter/4]) {
           cube([BeamDiameter, BeamDiameter/4, BeamDiameter/8], center=true);
@@ -157,35 +155,37 @@ module olive_beam(p1, p2, p3, p4, p5, p6) {
 }
 
 
-module beam5(points) {
-     p1p = points[beam[0]];
-     p2p = points[beam[1]];
-     p3p = points[beam[2]];
-     p4p = points[beam[3]];
-     p5p = points[beam[4]];
-     p6p = points[beam[5]];
-
-     
+module create_beams5(points, beams) {
+     for (beam=beams) {
+          p1p = points[beam[0]];
+          p2p = points[beam[1]];
+          p3p = points[beam[2]];
+          p4p = points[beam[3]];
+          p5p = points[beam[4]];
+          p6p = points[beam[5]];
+          
+          
     prepare_for_stl(p1p, p6p, p5p, 0) {
-      //    cyan_beam(p1p, p2p, p3p, p4p, p5p, p6p);
+          cyan_beam(p1p, p2p, p3p, p4p, p5p, p6p);
      } 
-    /* prepare_for_stl(p1p, p5p, p3p, 1) {
+     prepare_for_stl(p1p, p5p, p3p, 1) {
           tomato_beam(p1p, p2p, p3p, p4p, p5p, p6p);
-     }*/
+     }
      prepare_for_stl(p1p, p4p, p6p, 2) {
-      //    olive_beam(p1p, p2p, p3p, p4p, p5p, p6p);
+          olive_beam(p1p, p2p, p3p, p4p, p5p, p6p);
      }
     prepare_for_stl(p1p, p3p, p2p, 3) {
-         // silver_beam(p1p, p2p, p3p, p4p, p5p, p6p);
-     } 
-      prepare_for_stl(p1p, p2p, p4p, 4) {
-          purple_beam(p1p, p2p, p3p, p4p, p5p, p6p);
-     }
+         silver_beam(p1p, p2p, p3p, p4p, p5p, p6p);
+    } 
+    prepare_for_stl(p1p, p2p, p4p, 4) {
+         purple_beam(p1p, p2p, p3p, p4p, p5p, p6p);
+    }
      
-     
+
+    }
 }
 
 
 //create_wire(points2, triangles2);
-beam5(points2);
+
 

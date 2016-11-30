@@ -23,6 +23,12 @@
 #define PINK 4
 #define BLUE 5
 
+#define PURPLE 0
+#define TOMATO 3
+#define CYAN 4
+#define SILVER 1
+#define OLIVE 2
+
 struct beam_t {
   int point;
   int color;
@@ -143,7 +149,9 @@ compare_beams(const void *p1, const void *p2)
 
 int sort_joint(flo_t *points, struct joint_t *joint) {
   int c;
-
+  int lowest_beam = 0;
+  flo_t max_x = -INFINITY; 
+   
   c = joint_cardinality(joint);
  
   switch(c) {
@@ -154,9 +162,7 @@ int sort_joint(flo_t *points, struct joint_t *joint) {
     printf("sorting joint with cardinality 6\n");
     
     // we want the beam with the highest X point to be the 0 (black)
-   
-    int lowest_beam = 0;
-   
+    
     for (int i=1; i < c; i++) {
       if (BEAM_POINT_X(i) > BEAM_POINT_X(lowest_beam)) {
         lowest_beam = i;
@@ -171,17 +177,13 @@ int sort_joint(flo_t *points, struct joint_t *joint) {
                     POINT_Y(joint->center),
                     POINT_Z(joint->center) } ;
 
-    printf("got zn\n");
+    
     // would need to be normalized, but doesn't matter for now
     flo_t xn[3] = {
       BEAM_POINT_X(lowest_beam) - POINT_X(joint->center),
       BEAM_POINT_Y(lowest_beam) - POINT_Y(joint->center),
       BEAM_POINT_Z(lowest_beam) - POINT_Z(joint->center),
     } ; 
-
-    /* flo_t xn[3] = { 1.0, 0.0, 0.0 } ;
-       flo_t yn[3] = { 0.0, 1.0, 0.0 } ;
-    */
     flo_t yn[3];
 
     cross(zn, xn, yn);
@@ -209,20 +211,7 @@ int sort_joint(flo_t *points, struct joint_t *joint) {
         
         // cf. http://stackoverflow.com/questions/29754538/rotate-object-from-one-coordinate-system-to-another
        
-        flo_t point_in_black_referential[3] = { 1.0, 0.0, 0.0 };
-
-        printf("joint center is %f %f %f\n", (POINT(joint->center))[0],
-               (POINT(joint->center))[1],
-               (POINT(joint->center))[2]);
-             
-        printf("let's move the center in the black referential\n");
-        mult(co, (POINT(joint->center)), point_in_black_referential);
-
-        printf("in black referential: %f %f %f\n",
-               point_in_black_referential[0],
-               point_in_black_referential[1],
-               point_in_black_referential[2]);
-
+     
         // and the point itself
         mult(co, POINT(joint->beams[i].point), &(joint->beams[i].in_black_referential));
 
@@ -245,8 +234,7 @@ int sort_joint(flo_t *points, struct joint_t *joint) {
     // now each joint has the coordinates in the black beam referential. we can sort the beams & put colors on them
 
     int green = 0;
-    flo_t max_x = -INFINITY; 
-    for (int i = 0; i < c; i++) {
+   for (int i = 0; i < c; i++) {
       if (i != lowest_beam) {
         flo_t *in_black_referential = joint->beams[i].in_black_referential;
         if (in_black_referential[Y] < 0 && in_black_referential[X] > max_x) {
@@ -330,6 +318,120 @@ int sort_joint(flo_t *points, struct joint_t *joint) {
     joint->beams[red].color = RED;
         
     break;
+
+
+  case 5:
+    
+    // this is the 5 beam joint
+    // p2 is going to be the point with the smallest X. (negative)
+        
+    for (int i=1; i < c; i++) {
+      if (BEAM_POINT_X(i) < BEAM_POINT_X(lowest_beam)) {
+        lowest_beam = i;
+      }
+    }
+
+    // now let's put all the points in the purple referential
+    
+    flo_t zn5[3] = { POINT_X(joint->center), 
+                    POINT_Y(joint->center),
+                    POINT_Z(joint->center) } ;
+    
+    // would need to be normalized, but doesn't matter for now
+    flo_t xn5[3] = {
+      BEAM_POINT_X(lowest_beam) - POINT_X(joint->center),
+      BEAM_POINT_Y(lowest_beam) - POINT_Y(joint->center),
+      BEAM_POINT_Z(lowest_beam) - POINT_Z(joint->center),
+    } ; 
+    
+    flo_t yn5[3];
+
+    cross(zn5, xn5, yn5);
+    
+    flo_t *m5[3] = { xn5, yn5, zn5 };
+    Transpose(m5, 3);
+    flo_t *co5[3];
+    for(int i=0; i < 3; i++) {
+      co5[i] = (flo_t *)malloc(sizeof(flo_t)*3);
+    }
+    
+    CoFactor(m5, 3, co5);
+    Transpose(co5, 3);
+    float det5 = Determinant(m5, 3);
+    for(int i=0; i < 3; i++) {
+      for (int j=0; j < 3; j++) {
+        co5[i][j] = co5[i][j] / det5;
+        printf("(%d, %d) = %f\n", i, j, co5[i][j]); 
+      }
+    }
+
+    
+    for (int i=0; i < c; i++) {
+      mult(co5, POINT(joint->beams[i].point), &(joint->beams[i].in_black_referential));
+    }
+
+    // now the points are expressed in the purple beam frame
+
+    int tomato = 0 ;
+    max_x = INFINITY;
+    for (int i = 0; i < c; i++) {
+       if (i != lowest_beam) {
+        flo_t *in_black_referential = joint->beams[i].in_black_referential;
+        if (in_black_referential[Y] < 0 && in_black_referential[0] < max_x) {
+          tomato = i;
+          max_x = in_black_referential[X];
+        }
+      }
+    }
+
+    int cyan = 0;
+    max_x = INFINITY;
+    for (int i = 0; i < c; i++) {
+       if (i != lowest_beam && i != tomato) {
+        flo_t *in_black_referential = joint->beams[i].in_black_referential;
+        if (in_black_referential[Y] > 0 && in_black_referential[0] < max_x) {
+          cyan = i;
+          max_x = in_black_referential[X];
+        }
+      }
+    }
+
+    int olive = 0 ;
+    max_x = -INFINITY;
+    for (int i = 0; i < c; i++) {
+       if (i != lowest_beam && i != tomato) {
+        flo_t *in_black_referential = joint->beams[i].in_black_referential;
+        if (in_black_referential[Y] > 0 && in_black_referential[0] > max_x) {
+          olive = i;
+          max_x = in_black_referential[X];
+        }
+      }
+    }
+    
+    int silver = 0 ;
+    for (int i = 0; i < c; i++) {
+       if (i != lowest_beam && i != tomato && i != cyan && i != olive) {
+         silver = i;
+       }
+    }
+    
+
+    printf("5beam combo: center: %d, lowest: %d, tomato: %d, cyan: %d, silver: %d, olive: %d\n",
+           joint->center,
+           joint->beams[lowest_beam].point,
+           joint->beams[tomato].point,
+           joint->beams[cyan].point,
+           joint->beams[silver].point,
+           joint->beams[olive].point
+           ); 
+
+    joint->beams[lowest_beam].color = PURPLE;
+    joint->beams[tomato].color = TOMATO;
+    joint->beams[cyan].color = CYAN;
+    joint->beams[silver].color = SILVER;
+    joint->beams[olive].color = OLIVE;
+    
+    break; 
     
   default:
     printf("skipping joint, cardinality is %d\n", c);
@@ -369,6 +471,7 @@ int export_joint(flo_t *points, struct joint_t *joint) {
     
     break;
   case 5:
+    qsort(joint->beams, c, sizeof(struct beam_t), compare_beams);
     // they are not sorted yet
     printf("[%d, %d, %d, %d, %d, %d],\n",
            joint->center,

@@ -1,9 +1,9 @@
 ScaleFactor=0.5;
-BeamDiameter=20;
+BeamDiameter=10;
 BeamLip=10;
 
 
-PrepareForSTL=true;
+PrepareForSTL=false;
 STLSpacing=5;
 Tolerance=0.2;
 
