@@ -49,7 +49,6 @@ beams4 = [
 
 // for STL only
 // create_beams6(points2, [ beams6[0] ]); 
-
 // create_beams5(points2, [ beams5[0] ]); 
 
 beams =
@@ -316,7 +315,7 @@ beams =
     [29, 37, 2],
 -4, 51],
 [6,
-    [38, 1, 39, 31, 11, 33, 36],
+    [38, 1, 39, 31, 11, 33, 36], 
 1, 6,
     [39, 41, 10, 32, 38, 1, 36],
 3, 52],
@@ -333,9 +332,12 @@ beams =
 ];
 
  
-//create_wire(points2, triangles2); 
-create_beams(points2, beams);  
+create_wire(points2, triangles2); 
+//create_beams(points2, beams);  
  
+
+
+//create_beams6(points2, [ beams6[0] ]); 
+create_beams2(points2, [beams4[0]]);  
  
- 
- 
+   
