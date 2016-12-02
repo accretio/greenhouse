@@ -3,10 +3,10 @@ BeamDiameter=20;
 BeamLip=10;
 
 
-PrepareForSTL=false;
+PrepareForSTL=true;
 
 STLSpacing=5;
-Tolerance=0.2;
+Tolerance=0;
 
 
 TextHeight=5;
@@ -59,7 +59,7 @@ module prepare_for_stl(p1, p2, p3, pos=0) {
 module prepare_for_stl_(p1, p2, p3, prepareForStl, pos=0) {
      if (prepareForStl) { 
           translate([ 0, (STLSpacing + BeamDiameter) * pos, 0]) { 
-               rotate([0, 0, 0]) {
+               rotate([0, 90, 0]) {
                     ref_38_31 = new_cs(origin=p1,axes=[(p2-p1), cross((p2-p1), (p3-p1))]);
                     back_to_absolute(ref_38_31) {
                          children(); 
