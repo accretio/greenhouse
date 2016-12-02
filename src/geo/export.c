@@ -11,7 +11,7 @@
 
 #define MAX_NUMBER_OF_POINTS 100
 #define MAX_JOINT_CARDINALITY 6
-
+#define SCALE_FACTOR 100
 #define X 0
 #define Y 1
 #define Z 2
@@ -590,15 +590,15 @@ int main() {
         if (beam2 == 0) {
           printf("couldn't link back the beam, failing\n");
           return (-2); 
-        }
+        } 
 
         int w = 0;
         w = WITNESS(joint.center, beam.point);
         if (witnesses[w] == 0) {
           witnesses[w] = 1;
-          printf("[%d,\n    ", c);
+          printf("[%d,\n    ", joint.center);
           export_joint(dome.sphere.points, &joint);
-          printf("%d, %d,\n    ", beam.color, c2);
+          printf("%d, %d,\n    ", beam.color, beam.point);
           export_joint(dome.sphere.points, &joint2);
           printf("%d, %d],\n", beam2->color, pos);
           pos += 1;

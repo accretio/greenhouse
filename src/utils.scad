@@ -9,14 +9,16 @@ STLSpacing=5;
 Tolerance=0;
 
 
-TextHeight=5;
+TextHeight=10;
 
 module beam(p1, p2, p3, color, label) {
+     
+   
      ref_38_31 = new_cs(origin=p1,axes=[(p2-p1), cross((p2-p1), (p3-p1))]);
      in_cs(ref_38_31) {
           color(color) {
-             
-               intersection() {
+              
+               intersection() { 
                     union() {
                          difference() {
                               translate([-BeamLip, 0, 0]) {
@@ -24,17 +26,17 @@ module beam(p1, p2, p3, color, label) {
                                         cylinder(ScaleFactor * norm((p2-p1)) + BeamLip, BeamDiameter/2, BeamDiameter/2);
                                    }
                               }
+                             
                               children(0);
-                              // TODO: redo the text
-                            /*  if (PrepareForSTL) {
-                                   translate([ScaleFactor * norm((p2-p1)) - TextHeight, 0, 0]) {
-                                        rotate([0, 90, 0]) {
-                                             linear_extrude(TextHeight) {
-                                                  text(label, halign="center", valign="center", size=6);
-                                             }
+                              if (PrepareForSTL) {
+                                 translate([3*BeamLip, 0, BeamDiameter/2 - 1 ]) {
+                                   rotate([0, 0, 0]) {
+                                        linear_extrude(TextHeight) {
+                                             text(label, halign="center", valign="center", size=6);
                                         }
                                    }
-                              }*/
+                              } 
+                              } 
                          };
                          children(1) ;
                     }

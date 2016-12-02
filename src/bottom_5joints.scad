@@ -48,8 +48,8 @@ module olive_tenon() {
      }
 }
 
-module purple_beam(p1, p2, p3, p4, p5, p6) {
-     beam(p1, p2, p4, "purple", label="R") {
+module purple_beam(p1, p2, p3, p4, p5, p6, label="") {
+     beam(p1, p2, p4, "purple", label) {
           union() {
                translate([-BeamDiameter/4 * 3, 0, 0]) {
                     cube([2*BeamDiameter, BeamDiameter, BeamDiameter], center=true);
@@ -73,10 +73,10 @@ module purple_beam(p1, p2, p3, p4, p5, p6) {
 
 
 
-module cyan_beam(p1, p2, p3, p4, p5, p6) {
+module cyan_beam(p1, p2, p3, p4, p5, p6, label="") {
     
      difference() {
-          beam(p1, p6, p5, "cyan", label="R") {
+          beam(p1, p6, p5, "cyan", label) {
                translate([-BeamDiameter - BeamDiameter/2, 0, 0]) {
                     cube([2*BeamDiameter, BeamDiameter, BeamDiameter], center=true);
                };
@@ -98,10 +98,10 @@ module cyan_beam(p1, p2, p3, p4, p5, p6) {
      }
 }
 
-module tomato_beam(p1, p2, p3, p4, p5, p6) {
+module tomato_beam(p1, p2, p3, p4, p5, p6, label="") {
      difference() {
           union() {
-               beam(p1, p5, p3, "tomato", label="R") {
+               beam(p1, p5, p3, "tomato", label) {
                     translate([-BeamDiameter/2, 0, 0]) {
                          cube([2*BeamDiameter, BeamDiameter, BeamDiameter], center=true);
                     };
@@ -113,7 +113,7 @@ module tomato_beam(p1, p2, p3, p4, p5, p6) {
           in_beam_referential(p1, p3, p2){
                silver_tenon();
           }
-          beam(p1, p3, p2, "silver", label="R") {
+          beam(p1, p3, p2, "silver", label="") {
                translate([-BeamDiameter/4 - BeamDiameter/2, 0, 0]) {
                     cube([2*BeamDiameter, BeamDiameter, BeamDiameter], center=true);
                };
@@ -122,9 +122,9 @@ module tomato_beam(p1, p2, p3, p4, p5, p6) {
 }
 
 
-module silver_beam(p1, p2, p3, p4, p5, p6) {
+module silver_beam(p1, p2, p3, p4, p5, p6, label="") {
      difference() {
-          beam(p1, p3, p2, "silver", label="R") {
+          beam(p1, p3, p2, "silver", label) {
                translate([-BeamDiameter/4 - BeamDiameter/2, 0, 0]) {
                     cube([2*BeamDiameter, BeamDiameter, BeamDiameter], center=true);
                };
@@ -136,9 +136,9 @@ module silver_beam(p1, p2, p3, p4, p5, p6) {
 
 
 
-module olive_beam(p1, p2, p3, p4, p5, p6) {
+module olive_beam(p1, p2, p3, p4, p5, p6, label="") {
      difference() {
-          beam(p1, p4, p6, "olive", label="R") {
+          beam(p1, p4, p6, "olive", label) {
                translate([-BeamDiameter/4 - BeamDiameter/2, 0, 0]) {
                     cube([2*BeamDiameter, BeamDiameter, BeamDiameter], center=true);
                };

@@ -6,7 +6,7 @@ use <bottom_5joints.scad>
 include <bottom_2joints.scad>
 
 
-module create_beam6_color(points, beam, color, prepareForStl, pos) {
+module create_beam6_color(points, beam, color, prepareForStl, pos, label) {
 
      p1p = points[beam[0]];
      p2p = points[beam[1]];
@@ -18,32 +18,32 @@ module create_beam6_color(points, beam, color, prepareForStl, pos) {
      
      if (color == 0) {
           prepare_for_stl_(p1p, p2p, p3p, prepareForStl, pos) {
-               black_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p);
+               black_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p, label);
                children();
           }
      } else if (color == 1) {
           prepare_for_stl_(p1p, p3p, p7p, prepareForStl, pos) {
-               red_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p);
+               red_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p, label);
                children();
           }
      } else if (color == 2) {
           prepare_for_stl_(p1p, p4p, p2p, prepareForStl, pos) {
-               green_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p);
+               green_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p, label);
                children();
           }
      } else if (color == 3) {
           prepare_for_stl_(p1p, p5p, p6p, prepareForStl, pos) {
-               orange_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p);
+               orange_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p, label);
                children();
           }
      } else if (color == 4) {
           prepare_for_stl_(p1p, p6p, p4p, prepareForStl, pos) {
-               pink_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p);
+               pink_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p, label);
                children();
           }
      } else if (color == 5) {
           prepare_for_stl_(p1p, p7p, p5p, prepareForStl, pos) {
-               blue_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p);
+               blue_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p, label);
                children();
           }
      } else {
@@ -52,7 +52,7 @@ module create_beam6_color(points, beam, color, prepareForStl, pos) {
      
 }
 
-module create_beam5_color(points, beam, color, prepareForStl, pos) {
+module create_beam5_color(points, beam, color, prepareForStl, pos, label) {
 
      p1p = points[beam[0]];
      p2p = points[beam[1]];
@@ -63,27 +63,27 @@ module create_beam5_color(points, beam, color, prepareForStl, pos) {
     
      if (color == 0) {
           prepare_for_stl_(p1p, p2p, p4p, prepareForStl, pos) {
-               purple_beam(p1p, p2p, p3p, p4p, p5p, p6p);
+               purple_beam(p1p, p2p, p3p, p4p, p5p, p6p, label);
                children();
           }
      } else if (color == 1) {
           prepare_for_stl_(p1p, p3p, p2p, prepareForStl, pos) {
-               silver_beam(p1p, p2p, p3p, p4p, p5p, p6p);
+               silver_beam(p1p, p2p, p3p, p4p, p5p, p6p, label);
                children();
           }
      } else if (color == 2) {
           prepare_for_stl_(p1p, p4p, p6p, prepareForStl, pos) {
-               olive_beam(p1p, p2p, p3p, p4p, p5p, p6p);
+               olive_beam(p1p, p2p, p3p, p4p, p5p, p6p, label);
                children();
           }
      } else if (color == 3) {
           prepare_for_stl_(p1p, p5p, p3p, prepareForStl, pos) {
-               tomato_beam(p1p, p2p, p3p, p4p, p5p, p6p);
+               tomato_beam(p1p, p2p, p3p, p4p, p5p, p6p, label);
                children();
           }
      } else if (color == 4) {
           prepare_for_stl_(p1p, p6p, p5p, prepareForStl, pos) {
-               cyan_beam(p1p, p2p, p3p, p4p, p5p, p6p);
+               cyan_beam(p1p, p2p, p3p, p4p, p5p, p6p, label);
                children();
           }
      } else {
@@ -92,7 +92,7 @@ module create_beam5_color(points, beam, color, prepareForStl, pos) {
      
 }
 
-module create_beam4_color(points, beam, color, prepareForStl, pos) {
+module create_beam4_color(points, beam, color, prepareForStl, pos, label) {
 
      p1p = points[beam[0]];
      p2p = points[beam[1]];
@@ -100,12 +100,12 @@ module create_beam4_color(points, beam, color, prepareForStl, pos) {
 
      if (color == -4) {
           prepare_for_stl_(p1p, p2p, p3p, prepareForStl, pos) {
-               beam1(p1p, p2p, p3p);
+               beam1(p1p, p2p, p3p, label);
                children();
           }
      } else if (color == -3 ) {
           prepare_for_stl_(p1p, p3p, p2p, prepareForStl, pos) {
-               beam2(p1p, p2p, p3p);
+               beam2(p1p, p2p, p3p, label);
                children();
           }
      }  else {
@@ -115,17 +115,17 @@ module create_beam4_color(points, beam, color, prepareForStl, pos) {
 }
 
 
-module assemble_beam(points, beam, c, prepareForStl, pos) {
+module assemble_beam(points, beam, c, prepareForStl, pos, label) {
      if (len(beam) == 7) {
-          create_beam6_color(points, beam, c, prepareForStl, pos) {
+          create_beam6_color(points, beam, c, prepareForStl, pos, label) {
                children();
           }
      } else if (len(beam) == 6) {
-          create_beam5_color(points, beam, c, prepareForStl, pos) {
+          create_beam5_color(points, beam, c, prepareForStl, pos, label) {
                children();
           }
      } else if (len(beam) == 3) {
-          create_beam4_color(points, beam, c, prepareForStl, pos) {
+          create_beam4_color(points, beam, c, prepareForStl, pos, label) {
                children();
           }
      } else {
@@ -136,8 +136,10 @@ module create_beams(points, beams) {
      
      for (beam=beams) {
 
+          point1 = beam[0];
           points1 = beam[1];
           color1 = beam[2];
+          point2 = beam[3];
           points2 = beam[4];
           color2 = beam[5];
           pos = beam[6];
@@ -147,8 +149,8 @@ module create_beams(points, beams) {
           echo(color1);
           echo(points2);
           echo(color2);
-          assemble_beam(points, points1, color1, true, pos) {
-         
+          label = str(point1, " - ",   point2);
+          assemble_beam(points, points1, color1, true, pos, label) {
                assemble_beam(points, points2, color2); 
           }
 

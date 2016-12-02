@@ -71,10 +71,10 @@ module orange_mortise(tolerance=0) {
 }
 
 
-module green_beam(p1, p2, p3, p4, p5, p6, p7) {
+module green_beam(p1, p2, p3, p4, p5, p6, p7, label="") {
      difference() {
           union() {
-               beam(p1, p4, p2, "green", label="G") {
+               beam(p1, p4, p2, "green", label) {
                     translate([-BeamDiameter/2, 0, 0]) {
                          cube([2*BeamDiameter, BeamDiameter, BeamDiameter], center=true);
                     };
@@ -93,10 +93,10 @@ module green_beam(p1, p2, p3, p4, p5, p6, p7) {
 }
 
 
-module red_beam(p1, p2, p3, p4, p5, p6, p7) {
+module red_beam(p1, p2, p3, p4, p5, p6, p7, label="") {
      difference() {
           union() {
-               beam(p1, p3, p7, "red", label="R") {
+               beam(p1, p3, p7, "red", label) {
                     translate([-BeamDiameter/2, 0, 0]) {
                          cube([2*BeamDiameter, BeamDiameter, BeamDiameter], center=true);
                     };
@@ -121,10 +121,10 @@ module red_beam(p1, p2, p3, p4, p5, p6, p7) {
 }
 
  
-module black_beam(p1, p2, p3, p4, p5, p6, p7) {
+module black_beam(p1, p2, p3, p4, p5, p6, p7, label="") {
      
      difference() {
-          beam(p1, p2, p3, "black", label="BL") {
+          beam(p1, p2, p3, "black", label) {
           }; 
           
           orange_split_plane(p1, p2, p3, p4, p5, p6);
@@ -159,9 +159,9 @@ module black_beam(p1, p2, p3, p4, p5, p6, p7) {
      
 }
 
-module blue_beam(p1, p2, p3, p4, p5, p6, p7) {
+module blue_beam(p1, p2, p3, p4, p5, p6, p7, label="") {
      difference() {
-          beam(p1, p7, p5, "blue", label="B") {
+          beam(p1, p7, p5, "blue", label) {
                translate([-BeamDiameter/2, 0, 0]) {
                     cube([2*BeamDiameter, BeamDiameter, BeamDiameter], center=true);
                };
@@ -210,11 +210,11 @@ module orange_vertical_splitter2(p1, p2, p3, p4, p5, p6, p7) {
 }
 
 
-module pink_beam(p1, p2, p3, p4, p5, p6, p7) {
+module pink_beam(p1, p2, p3, p4, p5, p6, p7, label="") {
      difference() {
           union() {
                difference() {
-                    beam(p1, p6, p4, "pink", label="P") {
+                    beam(p1, p6, p4, "pink", label) {
                          // this one has a pin on the inside, slighly torn inside
                          translate([-BeamDiameter/2, 0, 0]) {
                               cube([2*BeamDiameter, BeamDiameter, BeamDiameter], center=true);
@@ -265,9 +265,9 @@ module orange_splitter(p1, p2, p3, p4, p5, p6, p7) {
 
 
 
-module orange_beam(p1, p2, p3, p4, p5, p6, p7, tolerance=0) {
+module orange_beam(p1, p2, p3, p4, p5, p6, p7, tolerance=0, label="") {
      difference() {
-          beam(p1, p5, p6, "orange", label="O") {
+          beam(p1, p5, p6, "orange", label) {
           };
           in_beam_referential(p1, p5, p6) {
                orange_mortise(tolerance);

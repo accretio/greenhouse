@@ -2,10 +2,10 @@ include <data.scad>
 include <local.scad>
 include <utils.scad>
  
-module beam1(p1, p2, p3, tolerance) {
+module beam1(p1, p2, p3, tolerance, label="") {
     
      difference() {
-          beam(p1, p2, p3, "olive", label="R") {};
+          beam(p1, p2, p3, "olive", label) {};
           
           difference() {
                beam(p1, p3, p2, "red") {};
@@ -26,9 +26,9 @@ module beam1(p1, p2, p3, tolerance) {
 }
 
 
-module beam2(p1, p2, p3) {
+module beam2(p1, p2, p3, label="") {
     difference() {
-          beam(p1, p3, p2, "olive", label="R") {
+          beam(p1, p3, p2, "olive", label) {
           };
           beam1(p1, p2, p3, -Tolerance);
 
