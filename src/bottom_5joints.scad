@@ -4,6 +4,7 @@ include <wireframe.scad>
 include <utils.scad>
 
 /*
+
       p2
   p4      p3
       p1 
@@ -22,8 +23,7 @@ module purple_tenon(tolerance=0.0) {
 
 module tomato_tenon(tolerance=0.0) {
      rotate([0, 0, 0]) {
-          translate([BeamDiameter/2 + tolerance, 0, -BeamDiameter/8]) {
-         
+          translate([BeamDiameter/2 + tolerance, 0, 0]) {
                cube([BeamDiameter/2, BeamDiameter/2-(2*tolerance), BeamDiameter/4 -(2*tolerance) ], center=true);
           }
      }
@@ -49,22 +49,21 @@ module olive_tenon(tolerance=0.0) {
 }
 
 module purple_beam(p1, p2, p3, p4, p5, p6) {
-     difference() {
-          beam(p1, p2, p4, "purple", label="R") {
-               union() {
-                    translate([-BeamDiameter/4 * 3, 0, 0]) {
-                         cube([2*BeamDiameter, BeamDiameter, BeamDiameter], center=true);
-                    };
-                    translate([-BeamDiameter/4, -BeamDiameter/8, BeamDiameter/2 - BeamDiameter/16]) {
-                         cube([2*BeamDiameter, BeamDiameter/4, BeamDiameter/4], center=true); 
-                    }
-                    translate([-BeamDiameter/4, 0, -BeamDiameter/2 + BeamDiameter/16]) {
-                         cube([2*BeamDiameter, BeamDiameter/4, BeamDiameter/4], center=true); 
-                    } 
+     beam(p1, p2, p4, "purple", label="R") {
+          union() {
+               translate([-BeamDiameter/4 * 3, 0, 0]) {
+                    cube([2*BeamDiameter, BeamDiameter, BeamDiameter], center=true);
+               };
+               translate([-BeamDiameter/4, -BeamDiameter/8, BeamDiameter/2 - BeamDiameter/16]) {
+                    cube([2*BeamDiameter, BeamDiameter/4, BeamDiameter/4], center=true); 
                }
-          };
+               translate([-BeamDiameter/4, 0, -BeamDiameter/2 + BeamDiameter/16]) {
+                    cube([2*BeamDiameter, BeamDiameter/4, BeamDiameter/4], center=true); 
+               } 
+          }
+     };
           
-     }
+    
      
      in_beam_referential(p1, p2, p4) {
           purple_tenon();
@@ -86,43 +85,39 @@ module cyan_beam(p1, p2, p3, p4, p5, p6) {
           olive_beam(p1, p2, p3, p4, p5, p6);
           
           in_beam_referential(p1, p5, p3) {
-               tomato_tenon();
+               tomato_tenon(Tolerance);
           }
           
           purple_beam(p1, p2, p3, p4, p5, p6);
           silver_beam(p1, p2, p3, p4, p5, p6);
           in_beam_referential(p1, p3, p2){
-               silver_tenon();
+               silver_tenon(Tolerance);
           }
+          tomato_beam(p1, p2, p3, p4, p5, p6, Tolerance);
                     
      }
 }
 
-module tomato_beam(p1, p2, p3, p4, p5, p6) {
+module tomato_beam(p1, p2, p3, p4, p5, p6, tolerance=0) {
      difference() {
           union() {
-               difference() {
-                    beam(p1, p5, p3, "tomato", label="R") {
-                         translate([- BeamDiameter/4 * 3, 0, 0]) {
-                              cube([2*BeamDiameter, BeamDiameter, BeamDiameter], center=true);
-                         };
-                    }
-                    beam(p1, p6, p5, "cyan", label="R") {
-                         
-                    } ;
+               beam(p1, p5, p3, "tomato", label="R") {
+                    translate([-BeamDiameter/2, 0, 0]) {
+                         cube([2*BeamDiameter, BeamDiameter, BeamDiameter], center=true);
+                    };
                }
                in_beam_referential(p1, p5, p3) {
-                    tomato_tenon();
+                    tomato_tenon(-tolerance);
                }
           }
           in_beam_referential(p1, p3, p2){
-               silver_tenon();
+               silver_tenon(Tolerance);
           }
           beam(p1, p3, p2, "silver", label="R") {
                translate([-BeamDiameter/4 - BeamDiameter/2, 0, 0]) {
                     cube([2*BeamDiameter, BeamDiameter, BeamDiameter], center=true);
                };
-          }
+          } 
      }
 }
 
@@ -135,7 +130,7 @@ module silver_beam(p1, p2, p3, p4, p5, p6) {
                };
                silver_tenon();
           }
-          purple_beam(p1, p2, p3, p4, p5, p6); 
+          purple_beam(p1, p2, p3, p4, p5, p6);
      }
 }
 
@@ -156,7 +151,9 @@ module olive_beam(p1, p2, p3, p4, p5, p6) {
 
 
 module create_beams5(points, beams) {
+     
      for (beam=beams) {
+          
           p1p = points[beam[0]];
           p2p = points[beam[1]];
           p3p = points[beam[2]];
@@ -165,27 +162,26 @@ module create_beams5(points, beams) {
           p6p = points[beam[5]];
           
           
-    prepare_for_stl(p1p, p6p, p5p, 0) {
-          cyan_beam(p1p, p2p, p3p, p4p, p5p, p6p);
-     } 
-     prepare_for_stl(p1p, p5p, p3p, 1) {
-          tomato_beam(p1p, p2p, p3p, p4p, p5p, p6p);
+          prepare_for_stl(p1p, p6p, p5p, 0) {
+               cyan_beam(p1p, p2p, p3p, p4p, p5p, p6p);
+          }
+          
+          prepare_for_stl(p1p, p5p, p3p, 1) {
+               tomato_beam(p1p, p2p, p3p, p4p, p5p, p6p);
+          }
+          
+          prepare_for_stl(p1p, p4p, p6p, 2) {
+               olive_beam(p1p, p2p, p3p, p4p, p5p, p6p);
+          }
+          
+          prepare_for_stl(p1p, p3p, p2p, 3) {
+               silver_beam(p1p, p2p, p3p, p4p, p5p, p6p);
+          }
+          
+          prepare_for_stl(p1p, p2p, p4p, 4) {
+               purple_beam(p1p, p2p, p3p, p4p, p5p, p6p);
+          }
+          
      }
-     prepare_for_stl(p1p, p4p, p6p, 2) {
-          olive_beam(p1p, p2p, p3p, p4p, p5p, p6p);
-     }
-    prepare_for_stl(p1p, p3p, p2p, 3) {
-         silver_beam(p1p, p2p, p3p, p4p, p5p, p6p);
-    } 
-    prepare_for_stl(p1p, p2p, p4p, 4) {
-         purple_beam(p1p, p2p, p3p, p4p, p5p, p6p);
-    }
      
-
-    }
 }
-
-
-//create_wire(points2, triangles2);
-
-

@@ -20,7 +20,7 @@ module beam1(p1, p2, p3) {
                translate([0, 0, BeamDiameter/2]) {
                     cube([2*BeamDiameter, BeamDiameter, BeamDiameter], center=true);
                }
-    }
+          }
           
      } 
 }
@@ -49,9 +49,23 @@ module create_beams2(points, beams) {
           p2p = points[beam[1]];
           p3p = points[beam[2]];
           
-         
-          beam1(p1p, p2p, p3p);
-          beam2(p1p, p2p, p3p);
+
+         prepare_for_stl(p1p, p2p, p3p) {
+               difference() {
+                    beam1(p1p, p2p, p3p);
+                    translate([500, 0, 0]) {
+                         cube([1000, 1000, 1000], center=true);
+                    } 
+               }
+          } 
+         prepare_for_stl(p1p, p3p, p2p) {
+               difference() {
+               beam2(p1p, p2p, p3p);
+               translate([500, 0, 0]) {
+                         cube([1000, 1000, 1000], center=true);
+                    }
+               }
+          }  
          
      }
 } 
