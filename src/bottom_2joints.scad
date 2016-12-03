@@ -21,9 +21,12 @@ module beam1(p1, p2, p3, tolerance, label="") {
                   cube([2*BeamDiameter, BeamDiameter, BeamDiameter], center=true);
                }
           }
-          
+          translate([500, 0, 0]) {
+               cube([1000, 1000, 1000], center=true);
+          }
      } 
-}
+} 
+
 
 
 module beam2(p1, p2, p3, label="") {
@@ -39,8 +42,10 @@ module beam2(p1, p2, p3, label="") {
                  
            }
           }
-        
-     } 
+          translate([500, 0, 0]) {
+               cube([1000, 1000, 1000], center=true);
+          }
+    } 
 }
  
 

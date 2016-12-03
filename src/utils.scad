@@ -3,7 +3,7 @@ BeamDiameter=20;
 BeamLip=10;
 
 
-PrepareForSTL=true;
+PrepareForSTL=false;
 
 STLSpacing=5;
 Tolerance=0;
@@ -11,8 +11,9 @@ Tolerance=0;
 
 TextHeight=10;
 
+NumberOfBeamsPerRow=4; 
 module beam(p1, p2, p3, color, label) {
-     
+      
    
      ref_38_31 = new_cs(origin=p1,axes=[(p2-p1), cross((p2-p1), (p3-p1))]);
      in_cs(ref_38_31) {
@@ -59,14 +60,19 @@ module prepare_for_stl(p1, p2, p3, pos=0) {
 }
 
 module prepare_for_stl_(p1, p2, p3, prepareForStl, pos=0) {
-     if (prepareForStl) { 
-          translate([ 0, (STLSpacing + BeamDiameter) * pos, 0]) { 
+     if (prepareForStl) {
+
+          // [ (STLSpacing + BeamDiameter) * (pos % NumberOfBeamsPerRow), (STLSpacing + BeamDiameter) * (-1 + round((pos + 1) / NumberOfBeamsPerRow)), 0]
+        /*  translate([ (STLSpacing + 3*BeamDiameter) * (pos % NumberOfBeamsPerRow), (STLSpacing + 3*BeamDiameter) * (round((pos + NumberOfBeamsPerRow) / NumberOfBeamsPerRow)), 0])  */
+          {
+
+               
                rotate([0, 90, 0]) {
                     ref_38_31 = new_cs(origin=p1,axes=[(p2-p1), cross((p2-p1), (p3-p1))]);
                     back_to_absolute(ref_38_31) {
                          children(); 
-                    }
-               }
+                    } 
+               } 
           }
      } else {
           children();
