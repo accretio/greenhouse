@@ -167,8 +167,6 @@ module cutter(hasTenon) {
 
 //tenon(0.1);
 
-start=0;
-end=0;
 module create_beams(points, beams) {
 
      //  for(b = [0 : (len(beams) - 1)]) {
