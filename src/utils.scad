@@ -1,4 +1,4 @@
-ScaleFactor=0.7;
+ScaleFactor=0.5;
 BeamDiameter=20;
 BeamLip=10;
 
@@ -29,7 +29,7 @@ module beam(p1, p2, p3, color, label) {
                               }
                              
                               children(0);
-                              if (PrepareForSTL) {
+                              if (true) {
                                  translate([3*BeamLip, 0, BeamDiameter/2 - 1 ]) {
                                    rotate([0, 0, 0]) {
                                         linear_extrude(TextHeight) {

@@ -63,27 +63,27 @@ module create_beam5_color(points, beam, color, prepareForStl, pos, label) {
     
      if (color == 0) {
           prepare_for_stl_(p1p, p2p, p4p, prepareForStl, pos) {
-               purple_beam(p1p, p2p, p3p, p4p, p5p, p6p, label);
+               purple_beam(p1p, p2p, p3p, p4p, p5p, p6p, label=label);
                children();
           }
      } else if (color == 1) {
           prepare_for_stl_(p1p, p3p, p2p, prepareForStl, pos) {
-               silver_beam(p1p, p2p, p3p, p4p, p5p, p6p, label);
+               silver_beam(p1p, p2p, p3p, p4p, p5p, p6p, label=label);
                children();
           }
      } else if (color == 2) {
           prepare_for_stl_(p1p, p4p, p6p, prepareForStl, pos) {
-               olive_beam(p1p, p2p, p3p, p4p, p5p, p6p, label);
+               olive_beam(p1p, p2p, p3p, p4p, p5p, p6p, label=label);
                children();
           }
      } else if (color == 3) {
           prepare_for_stl_(p1p, p5p, p3p, prepareForStl, pos) {
-               tomato_beam(p1p, p2p, p3p, p4p, p5p, p6p, label);
+               tomato_beam(p1p, p2p, p3p, p4p, p5p, p6p, label=label);
                children();
           }
      } else if (color == 4) {
           prepare_for_stl_(p1p, p6p, p5p, prepareForStl, pos) {
-               cyan_beam(p1p, p2p, p3p, p4p, p5p, p6p, label);
+               cyan_beam(p1p, p2p, p3p, p4p, p5p, p6p, label=label);
                children();
           }
      } else {
@@ -166,6 +166,7 @@ module cutter(hasTenon) {
 //cutter(true);
 
 //tenon(0.1);
+
 
 module create_beams(points, beams) {
 
