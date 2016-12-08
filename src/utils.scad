@@ -1,4 +1,4 @@
-ScaleFactor=0.5;
+ScaleFactor=0.6;
 BeamDiameter=20;
 BeamLip=10;
 

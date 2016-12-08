@@ -297,19 +297,19 @@ module create_beams6(points, beams) {
           p7p = points[beam[6]];
 
           prepare_for_stl(p1p, p4p, p2p, 0) {
-               green_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p);
+             //  green_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p);
           }
 
           prepare_for_stl(p1p, p3p, p7p, 1) {
-               red_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p);
+             //  red_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p);
           }
 
           prepare_for_stl(p1p, p7p, p5p, 2) {
-               blue_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p);
+            //   blue_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p);
           }
 
           prepare_for_stl(p1p, p6p, p4p, 3) {
-               pink_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p);
+            //  pink_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p);
           }
 
           prepare_for_stl(p1p, p5p, p6p, 4) {
@@ -317,7 +317,7 @@ module create_beams6(points, beams) {
           }
 
           prepare_for_stl(p1p, p2p, p3p, 5) {
-               black_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p);
+             //  black_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p);
           }
           
      }

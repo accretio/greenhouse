@@ -18,32 +18,32 @@ module create_beam6_color(points, beam, color, prepareForStl, pos, label) {
      
      if (color == 0) {
           prepare_for_stl_(p1p, p2p, p3p, prepareForStl, pos) {
-               black_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p, label);
+               black_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p, label=label);
                children();
           }
      } else if (color == 1) {
           prepare_for_stl_(p1p, p3p, p7p, prepareForStl, pos) {
-               red_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p, label);
+               red_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p, label=label);
                children();
           }
      } else if (color == 2) {
           prepare_for_stl_(p1p, p4p, p2p, prepareForStl, pos) {
-               green_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p, label);
+               green_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p, label=label);
                children();
-          }
+          } 
      } else if (color == 3) {
           prepare_for_stl_(p1p, p5p, p6p, prepareForStl, pos) {
-               orange_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p, label);
+              orange_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p, label=label);
                children();
           }
      } else if (color == 4) {
           prepare_for_stl_(p1p, p6p, p4p, prepareForStl, pos) {
-               pink_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p, label);
+               pink_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p, label=label);
                children();
           }
      } else if (color == 5) {
           prepare_for_stl_(p1p, p7p, p5p, prepareForStl, pos) {
-               blue_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p, label);
+               blue_beam(p1p, p2p, p3p, p4p, p5p, p6p, p7p, label=label);
                children();
           }
      } else {
@@ -100,12 +100,12 @@ module create_beam4_color(points, beam, color, prepareForStl, pos, label) {
 
      if (color == -4) {
           prepare_for_stl_(p1p, p2p, p3p, prepareForStl, pos) {
-               beam1(p1p, p2p, p3p, label);
+               beam1(p1p, p2p, p3p, label=label);
                children();
           }
      } else if (color == -3 ) {
           prepare_for_stl_(p1p, p3p, p2p, prepareForStl, pos) {
-               beam2(p1p, p2p, p3p, label);
+               beam2(p1p, p2p, p3p, label=label);
                children();
           }
      }  else {
@@ -117,15 +117,15 @@ module create_beam4_color(points, beam, color, prepareForStl, pos, label) {
 
 module assemble_beam(points, beam, c, prepareForStl, pos, label) {
      if (len(beam) == 7) {
-          create_beam6_color(points, beam, c, prepareForStl, pos, label) {
+          create_beam6_color(points, beam, c, prepareForStl, pos, label=label) {
                children();
           }
      } else if (len(beam) == 6) {
-          create_beam5_color(points, beam, c, prepareForStl, pos, label) {
+          create_beam5_color(points, beam, c, prepareForStl, pos, label=label) {
                children();
           }
      } else if (len(beam) == 3) {
-          create_beam4_color(points, beam, c, prepareForStl, pos, label) {
+          create_beam4_color(points, beam, c, prepareForStl, pos, label=label) {
                children();
           }
      } else {
@@ -167,7 +167,6 @@ module cutter(hasTenon) {
 
 //tenon(0.1);
 
-
 module create_beams(points, beams) {
 
      //  for(b = [0 : (len(beams) - 1)]) {
@@ -192,9 +191,9 @@ module create_beams(points, beams) {
                          assemble_beam(points, points2, color2); 
                     }
                }
-               cutter(true); 
-          }
-
+              cutter(true); 
+          } 
+          
           translate([2+BeamDiameter, 0, 0]) {
                rotate([180, 0, 0]) {
                     intersection() {
@@ -206,7 +205,7 @@ module create_beams(points, beams) {
                          cutter(false); 
                     }
                }
-          }
+          } 
               
      }
           

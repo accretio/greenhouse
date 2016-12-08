@@ -328,20 +328,20 @@ beams =
 [39,
     [39, 41, 10, 32, 38, 1, 36],
 2, 32,
-    [32, 39, 1],
+    [32, 39, 1], 
 -4, 54],
 ];
 
-
+ 
 //create_wire(points2, triangles2); 
 create_beams(points2, beams);
  
-
+ 
 
 //
 //create_beams2(points2, [beams4[0]]);   
 
-//create_beams5(points2, [ beams5[0] ]);    
+//create_beams6(points2, [ beams6[5] ]);    
     
   
    
