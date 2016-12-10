@@ -338,10 +338,9 @@ create_beams(points2, beams);
  
  
 
-//
-//create_beams2(points2, [beams4[0]]);   
+// create_beams2(points2, [beams4[0]]);   
 
-//create_beams6(points2, [ beams6[5] ]);    
+//create_beams6(points2, [ beams6[8] ]);    
     
   
    

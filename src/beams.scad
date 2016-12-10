@@ -100,12 +100,12 @@ module create_beam4_color(points, beam, color, prepareForStl, pos, label) {
 
      if (color == -4) {
           prepare_for_stl_(p1p, p2p, p3p, prepareForStl, pos) {
-               beam1(p1p, p2p, p3p, label=label);
+               beam1(p1p, p2p, p3p, tolerance=Tolerance, label=label);
                children();
           }
      } else if (color == -3 ) {
           prepare_for_stl_(p1p, p3p, p2p, prepareForStl, pos) {
-               beam2(p1p, p2p, p3p, label=label);
+               beam2(p1p, p2p, p3p, tolerance=Tolerance, label=label);
                children();
           }
      }  else {
@@ -167,6 +167,9 @@ module cutter(hasTenon) {
 
 //tenon(0.1);
 
+/* start=30;
+end=30;
+*/
 module create_beams(points, beams) {
 
      //  for(b = [0 : (len(beams) - 1)]) {

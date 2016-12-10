@@ -11,7 +11,7 @@ module beam1(p1, p2, p3, tolerance, label="") {
                beam(p1, p3, p2, "red") {};
                in_beam_referential(p1, p3, p2) {
                     translate([0, 0, -BeamDiameter/2 - tolerance]) {
-                    cube([2*BeamDiameter, BeamDiameter/4 - 2 * tolerance, BeamDiameter - 2* tolerance], center=true); 
+                         cube([2*BeamDiameter, BeamDiameter/4 - 2 * tolerance, BeamDiameter - 2* tolerance], center=true); 
                }
                     }
           }
@@ -63,7 +63,8 @@ module create_beams2(points, beams) {
                          cube([1000, 1000, 1000], center=true);
                     } 
                } 
-          }  
+         }
+        
          prepare_for_stl(p1p, p3p, p2p) {
               difference() {
                beam2(p1p, p2p, p3p);
