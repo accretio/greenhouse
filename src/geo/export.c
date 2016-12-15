@@ -574,7 +574,7 @@ int main() {
 
     int c = joint_cardinality(&joint);
     
-    if (c > 4) {
+    if (c == 5) {
       for (int p=0; p < c; p++) {
         struct beam_t beam = joint.beams[p];
         struct joint_t joint2 = joints[beam.point];

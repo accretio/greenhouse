@@ -33,7 +33,7 @@ module beam2(p1, p2, p3, label="") {
     difference() {
           beam(p1, p3, p2, "olive", label) {
           };
-          beam1(p1, p2, p3, -Tolerance);
+       /*    beam1(p1, p2, p3, -Tolerance);
 
           in_beam_referential(p1, p3, p2) {
                translate([-BeamDiameter/2 + Tolerance, 0, -BeamDiameter/2]) {
@@ -44,8 +44,8 @@ module beam2(p1, p2, p3, label="") {
           }
           translate([500, 0, 0]) {
                cube([1000, 1000, 1000], center=true);
-          }
-    } 
+          } */
+    }  
 }
  
 
@@ -56,23 +56,23 @@ module create_beams2(points, beams) {
           p3p = points[beam[2]];
           
 
-         prepare_for_stl(p1p, p2p, p3p) {
+       /* prepare_for_stl(p1p, p2p, p3p) {
                 difference() {
                     beam1(p1p, p2p, p3p, Tolerance);
                     translate([500, 0, 0]) {
                          cube([1000, 1000, 1000], center=true);
                     } 
                } 
-         }
+         } */
         
-         prepare_for_stl(p1p, p3p, p2p) {
+        prepare_for_stl(p1p, p3p, p2p) {
               difference() {
                beam2(p1p, p2p, p3p);
                translate([500, 0, 0]) {
                          cube([1000, 1000, 1000], center=true);
                     }
                } 
-          }   
+          }  
          
      }
 } 

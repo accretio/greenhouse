@@ -99,10 +99,11 @@ module create_beam4_color(points, beam, color, prepareForStl, pos, label) {
      p3p = points[beam[2]];
 
      if (color == -4) {
-          prepare_for_stl_(p1p, p2p, p3p, prepareForStl, pos) {
+        /*  prepare_for_stl_(p1p, p2p, p3p, prepareForStl, pos) {
                beam1(p1p, p2p, p3p, tolerance=Tolerance, label=label);
                children();
-          }
+          } */
+          echo("invalid color on the 4 beam");
      } else if (color == -3 ) {
           prepare_for_stl_(p1p, p3p, p2p, prepareForStl, pos) {
                beam2(p1p, p2p, p3p, tolerance=Tolerance, label=label);
@@ -137,11 +138,23 @@ module assemble_beam(points, beam, c, prepareForStl, pos, label) {
 CutterHeight=20;
 
 module tenon(tolerance) {
-     cube([BeamDiameter/3*2-2*tolerance, 2-2*tolerance, 2*CutterHeight - 10*tolerance], center=true);
-     translate([0, BeamDiameter/6-tolerance, 0]) {
-          cube([2-2*tolerance, BeamDiameter/3-2*tolerance, 2*CutterHeight - 10*tolerance], center=true);
-     }
-     cylinder(CutterHeight-5*tolerance, BeamDiameter/4-tolerance, BeamDiameter/4-tolerance);
+     
+     intersection() {
+          rotate([180, 0, 0]) {
+               
+               union() {cube([BeamDiameter/3*2-2*tolerance, 2-2*tolerance, 2*CutterHeight - 10*tolerance], center=true);
+                    translate([0, BeamDiameter/6-tolerance, 0]) {
+                         cube([2-2*tolerance, BeamDiameter/3-2*tolerance, 2*CutterHeight - 10*tolerance], center=true);
+                    }
+                    cylinder(CutterHeight-5*tolerance, BeamDiameter/4-tolerance, BeamDiameter/4-tolerance);
+               };
+               }
+               translate([0, 0, -2*CutterHeight]) {
+          cylinder(4*CutterHeight, BeamDiameter, 0);
+     
+               }
+
+}
 }
 
 //tenon(0.0);
@@ -165,15 +178,11 @@ module cutter(hasTenon) {
      
 //cutter(true);
 
-//tenon(0.1);
+//tenon(0.15);
 
-/* start=30;
-end=30;
-*/
 module create_beams(points, beams) {
 
-     //  for(b = [0 : (len(beams) - 1)]) {
-     for(b = [start : end]) {
+     for(b = [0 : (len(beams) - 1)]) {
           beam = beams[b];
           echo(beam);
           point1 = beam[0];
@@ -186,18 +195,26 @@ module create_beams(points, beams) {
           
           
           label = str(point1, " - ",   point2);
+echo(label);
 
 
-          difference() {
+// translate([0, 0, 55]) {
+     assemble_beam(points, points1, color1, false, 0, label) {
+          assemble_beam(points, points2, color2); 
+     }
+//}
+
+      /* difference() {
                translate([0, 0, 55]) {
                     assemble_beam(points, points1, color1, true, 0, label) {
                          assemble_beam(points, points2, color2); 
                     }
                }
-              cutter(true); 
-          } 
           
-          translate([2+BeamDiameter, 0, 0]) {
+          /*  cutter(true); 
+          } */
+          
+        /*  translate([2+BeamDiameter, 0, 0]) {
                rotate([180, 0, 0]) {
                     intersection() {
                          translate([0, 0, 55]) {
@@ -208,14 +225,16 @@ module create_beams(points, beams) {
                          cutter(false); 
                     }
                }
-          } 
+          }  */
               
      }
+    
           
      
          
-          
+           
 }
 
      
+ 
  
