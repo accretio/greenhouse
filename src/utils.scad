@@ -3,10 +3,10 @@ BeamDiameter=20;
 BeamLip=10;
 
 
-PrepareForSTL=false;
+PrepareForSTL=true;
 
 STLSpacing=5;
-Tolerance=0.5;
+Tolerance=0.35;
 
 
 TextHeight=10;
@@ -63,8 +63,8 @@ module prepare_for_stl_(p1, p2, p3, prepareForStl, pos=0) {
      if (prepareForStl) {
 
           // [ (STLSpacing + BeamDiameter) * (pos % NumberOfBeamsPerRow), (STLSpacing + BeamDiameter) * (-1 + round((pos + 1) / NumberOfBeamsPerRow)), 0]
-      //   translate([ (STLSpacing + BeamDiameter) * (pos % NumberOfBeamsPerRow), (STLSpacing + BeamDiameter) * (round((1 + pos + NumberOfBeamsPerRow) / NumberOfBeamsPerRow)), 0])  
-          {
+       //  translate([ (STLSpacing + BeamDiameter) * (pos % NumberOfBeamsPerRow), (STLSpacing + BeamDiameter) * (round((1 + pos + NumberOfBeamsPerRow) / NumberOfBeamsPerRow)), 0])  
+          { 
 
                
                rotate([0, 90, 0]) {
